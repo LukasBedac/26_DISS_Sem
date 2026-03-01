@@ -22,7 +22,7 @@ namespace Core.Distributions
 
         public double NextDouble()
         {
-            return _random.NextDouble() * (Max - Min) + Min;
+            return Min + (_random.NextDouble() * (Max - Min));
         }
     }
 }

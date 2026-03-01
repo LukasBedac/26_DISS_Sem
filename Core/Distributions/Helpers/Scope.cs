@@ -10,8 +10,8 @@ namespace Core.Distributions.Helpers
 {
     public class Scope
     {
-        public double Min { get; set; }
-        public double Max { get; set; }
+        public int Min { get; set; }
+        public int Max { get; set; }
         public double Probability { get; set; }
         public Scope(int min, int max, double probability)
         {
