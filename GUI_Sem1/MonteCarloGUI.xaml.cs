@@ -66,7 +66,8 @@ namespace GUI_Sem1
             model.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Title = "Replications",
+                StringFormat = "N0",
+                Title = "Replications"
             });
 
             model.Axes.Add(new LinearAxis
@@ -106,7 +107,7 @@ namespace GUI_Sem1
                 new Sim5(replications),
                 new Sim6(replications)
             };
-
+            // Generated using AI - 2 Vykreslovanie grafov
             var pointQueues = Enumerable.Range(0, 6).Select(_ => new ConcurrentQueue<DataPoint>()).ToList();
             List<Task> runningTasks = new List<Task>();
 
@@ -134,6 +135,7 @@ namespace GUI_Sem1
             foreach (BaseCore simulation in _simulations)
             {
                 int index = i;
+                simulation.GraphPercentCut = replicationsCuts;
                 Action stopAction = () => { simulation.Stopped = true; };
                 TopBar.OnStopRequest += stopAction;
 
@@ -154,9 +156,22 @@ namespace GUI_Sem1
 
             await Task.WhenAll(runningTasks);
             CompositionTarget.Rendering -= renderLoop;
+            // End of AI generated code - 2 Vykreslovanie grafov
 
             if (!TopBar.Stop)
             {
+                int j = 0;
+                foreach (BaseCore sim in _simulations)
+                {
+                    ListBoxItem timeItem = new ListBoxItem();
+                    timeItem.Foreground = Brushes.Green;
+                    timeItem.Content = $"Finish Time: {TimeSpan.FromSeconds(sim.AverageTime).ToString(@"h\:mm\:ss")}";
+                    listBoxResults.Items.Add(Graphs[j].Title);
+                    listBoxResults.Items.Add(timeItem);
+                    j++;
+                }
+
+
                 listBoxResults.Items.Add("All simulations completed successfully!");
             }
             else
@@ -200,7 +215,12 @@ namespace GUI_Sem1
                 } else if (bestSim1.NumberOfCorrectArrivals > 0.8 && bestSim1.NumberOfCorrectArrivals <= 0.81)
                 {
                     time = time.Add(TimeSpan.FromSeconds(1));
-                } else if (bestSim1.NumberOfCorrectArrivals < 0.8)
+                }
+                else if (bestSim1.NumberOfCorrectArrivals < 0.75)
+                {
+                    time = time.AddMinutes(-1);
+                }
+                else if (bestSim1.NumberOfCorrectArrivals < 0.8)
                 {
                     time = time.Add(TimeSpan.FromSeconds(-1));
                 }
@@ -212,6 +232,7 @@ namespace GUI_Sem1
                     timeItem.Content = $"Start Time: {bestSim1.StartTime.ToString(@"h\:mm\:ss")}";
                     listBoxResults.Items.Add(timeItem);
                     listBoxResults.Items.Add($"Correct Arrivals: {bestSim1.NumberOfCorrectArrivals}");
+                    listBoxResults.ScrollIntoView(listBoxResults.Items[listBoxResults.Items.Count - 1]);
                     break;
                 }
                 listBoxResults.Items.Add($"Start Time: {bestSim1.StartTime.ToString(@"h\:mm\:ss")}");
@@ -256,6 +277,10 @@ namespace GUI_Sem1
                 {
                     time = time.Add(TimeSpan.FromSeconds(1));
                 }
+                else if (bestSim2.NumberOfCorrectArrivals < 0.75)
+                {
+                    time = time.AddMinutes(-1);
+                }
                 else if (bestSim2.NumberOfCorrectArrivals < 0.8)
                 {
                     time = time.Add(TimeSpan.FromSeconds(-1));
@@ -268,6 +293,7 @@ namespace GUI_Sem1
                     timeItem.Content = $"Start Time: {bestSim2.StartTime.ToString(@"h\:mm\:ss")}";
                     listBoxResults.Items.Add(timeItem);
                     listBoxResults.Items.Add($"Correct Arrivals: {bestSim2.NumberOfCorrectArrivals}");
+                    listBoxResults.ScrollIntoView(listBoxResults.Items[listBoxResults.Items.Count - 1]);
                     break;
                 }
                 listBoxResults.Items.Add($"Start Time: {bestSim2.StartTime.ToString(@"h\:mm\:ss")}");

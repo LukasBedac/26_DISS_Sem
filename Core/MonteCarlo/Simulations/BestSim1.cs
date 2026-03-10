@@ -8,13 +8,14 @@ namespace Core.MonteCarlo.Simulations
 {
     public class BestSim1 : Sim1
     {
-        public List<int> SimulationResults { get; set; } = new List<int>();
+        public List<int> SimulationResults { get; set; }
         public TimeOnly StartTime { get; set; }
         public double NumberOfCorrectArrivals { get; set; } = 0;
 
         public BestSim1(int replications, TimeOnly time) : base(replications)
         {
             StartTime = time;
+            SimulationResults = new List<int>(replications);
         }
 
         public override void BeforeReplication()

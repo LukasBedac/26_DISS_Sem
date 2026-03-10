@@ -27,7 +27,7 @@
         <TextBox x:Name="txtTime" Grid.Row="0" Grid.Column="1" Margin="210,0,10,0" Height="20" Width="50" Text="7:00"></TextBox>
 
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Results" HorizontalAlignment="Center"></TextBlock>
-        <ListBox x:Name="listBoxResults" Grid.Row="1" Grid.Column="1" Margin="10,20,10,0"></ListBox>
+        <ListBox x:Name="listBoxResults" Grid.Row="1" Grid.Column="1" Margin="10,20,10,0" VerticalAlignment="Top" MinHeight="200" MaxHeight="400"></ListBox>
         
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
