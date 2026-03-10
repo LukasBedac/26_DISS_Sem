@@ -20,14 +20,14 @@
         
         <Button x:Name="btnBestPath" Content="Best Path" Grid.Row="0" Grid.Column="1" Margin="10, 10, 0, 0" Width="60" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Click="BestPath_Click"/>
 
-        <Button x:Name="btnTask2" Content="Task 2 P1" Grid.Row="0" Grid.Column="1" Margin="-40, 10, 0,0" Width="60" Height="20" VerticalAlignment="Top" Click="Task2_Click"/>
+        <Button x:Name="btnTask2" Content="Task 2 P1" Grid.Row="0" Grid.Column="1" Margin="-50, 10, 0,0" Width="60" Height="20" VerticalAlignment="Top" Click="Task2_Click"/>
 
-        <Button x:Name="btnTask2Path2" Content="Task 2 P2" Grid.Row="0" Grid.Column="1" Margin="90, 10,0,0" Width="60" Height="20" VerticalAlignment="Top" Click="Task2Path2_Click"/>
+        <Button x:Name="btnTask2Path2" Content="Task 2 P2" Grid.Row="0" Grid.Column="1" Margin="80, 10,0,0" Width="60" Height="20" VerticalAlignment="Top" Click="Task2Path2_Click"/>
         
-        <TextBox x:Name="txtTime" Grid.Row="0" Grid.Column="1" Margin="210,0,0,0" Height="20" Width="50" Text="7:00"></TextBox>
+        <TextBox x:Name="txtTime" Grid.Row="0" Grid.Column="1" Margin="210,0,10,0" Height="20" Width="50" Text="7:00"></TextBox>
 
         <TextBlock Grid.Row="1" Grid.Column="1" Text="Results" HorizontalAlignment="Center"></TextBlock>
-        <ListBox x:Name="listBoxResults" Grid.Row="1" Grid.Column="1" Margin="0,20,0,0"></ListBox>
+        <ListBox x:Name="listBoxResults" Grid.Row="1" Grid.Column="1" Margin="10,20,10,0"></ListBox>
         
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>

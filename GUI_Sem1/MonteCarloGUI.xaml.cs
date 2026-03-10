@@ -3,6 +3,7 @@ using Core.MonteCarlo.Simulations;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,48 +107,63 @@ namespace GUI_Sem1
                 new Sim6(replications)
             };
 
+            var pointQueues = Enumerable.Range(0, 6).Select(_ => new ConcurrentQueue<DataPoint>()).ToList();
+            List<Task> runningTasks = new List<Task>();
+
+            EventHandler renderLoop = (s, e) =>
+            {
+                for (int idx = 0; idx < 6; idx++)
+                {
+                    var queue = pointQueues[idx];
+                    if (queue.IsEmpty) continue;
+
+                    var series = Graphs[idx].Series[0] as LineSeries;
+
+                    while (queue.TryDequeue(out var point))
+                    {
+                        series.Points.Add(point);
+                    }
+
+                    Graphs[idx].InvalidatePlot(true);
+                }
+            };
+
+            CompositionTarget.Rendering += renderLoop;
+
             int i = 0;
             foreach (BaseCore simulation in _simulations)
             {
-
-                if (TopBar.Stop) break;
                 int index = i;
-                simulation.GraphPercentCut = replicationsCuts;
-                listBoxResults.Items.Add($"Starting {Graphs[index].Title}");
-
-                Action stopAction = () => 
-                { 
-                    simulation.Stopped = true; 
-                };
+                Action stopAction = () => { simulation.Stopped = true; };
                 TopBar.OnStopRequest += stopAction;
 
-                await Task.Run(() =>
+                runningTasks.Add(Task.Run(() =>
                 {
-                    var series = Graphs[index].Series[0] as LineSeries;
-
-                    simulation.OnUpdate = (rep, avg) =>
+                    try
                     {
-                        Application.Current.Dispatcher.InvokeAsync(() =>
+                        simulation.OnUpdate = (rep, avg) =>
                         {
-                            DataPoint point = new DataPoint(rep, avg / 60);
-                            series.Points.Add(point);
-                            Graphs[index].InvalidatePlot(true);
-                        });
-                    };
-                    simulation.Run();
-                });
-
-                if (TopBar.Stop) break;
-                ListBoxItem timeItem = new ListBoxItem();
-                timeItem.Foreground = Brushes.Green;
-                timeItem.Content = TimeSpan.FromSeconds(simulation.AverageTime).ToString(@"h\:mm\:ss");
-
-                listBoxResults.Items.Add($"Finished {Graphs[index].Title}");
-                listBoxResults.Items.Add(timeItem);
+                            pointQueues[index].Enqueue(new DataPoint(rep, avg / 60));
+                        };
+                        simulation.Run();
+                    }
+                    finally { TopBar.OnStopRequest -= stopAction; }
+                }));
                 i++;
             }
-        }
 
+            await Task.WhenAll(runningTasks);
+            CompositionTarget.Rendering -= renderLoop;
+
+            if (!TopBar.Stop)
+            {
+                listBoxResults.Items.Add("All simulations completed successfully!");
+            }
+            else
+            {
+                listBoxResults.Items.Add("Simulations stopped by user.");
+            }
+        }
         private async void Task2_Click(object sender, RoutedEventArgs e)
         {
             listBoxResults.Items.Clear();
