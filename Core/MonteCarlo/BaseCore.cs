@@ -12,6 +12,7 @@ namespace Core.MonteCarlo
     {
         protected const string DECELERATIONTIME = "6:30";
         protected const string STARTTIME = "6:00";
+        protected const string FINISHTIME = "7:35";
 
         protected const string GREEN = "green";
         protected const string RED = "red";

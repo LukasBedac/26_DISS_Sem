@@ -24,7 +24,7 @@ namespace Core.MonteCarlo.Simulations
 
         public override void AfterReplication()
         {
-            if (ActualTime <= TimeOnly.Parse("7:35"))
+            if (ActualTime <= TimeOnly.Parse(FINISHTIME))
             {
                 SimulationResults.Add(1);
             }

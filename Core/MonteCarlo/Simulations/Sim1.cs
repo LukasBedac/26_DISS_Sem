@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Core.MonteCarlo.Simulations
 {
     /// <summary>
-    /// Path: Z-S-R-D-Z
+    /// Path: Z-D-R-S-Z
     /// </summary>
     public class Sim1 : BaseCore
     {
