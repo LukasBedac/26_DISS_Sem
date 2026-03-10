@@ -2,10 +2,11 @@
 {
     public class SimulationCore
     {
+        public const int NUMBEROFPOINTS = 1000; 
         public int Replications { get; set; }
         public bool Stopped { get; set; }
         public bool Paused { get; set; }
-        public int ActualReplicationCount { get; set; }
+        public int ActualReplication { get; set; }
 
         public virtual void BeforeSimulation() { }
         public virtual void AfterSimulation() { }
@@ -16,10 +17,10 @@
 
         public virtual void Run()
         {
-            ActualReplicationCount = 0;
+            ActualReplication = 0;
             Stopped = false;
             BeforeSimulation();
-            while (ActualReplicationCount <= Replications)
+            while (ActualReplication < Replications)
             {
                 if (Stopped)
                 {
@@ -27,6 +28,7 @@
                 }
                 BeforeReplication();
                 OneReplication();
+                ActualReplication++;
                 AfterReplication();
             }
             AfterSimulation();

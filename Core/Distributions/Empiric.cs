@@ -31,7 +31,7 @@ namespace Core.Distributions
 
             _intervals.ForEach(interval => prob += interval.Probability);
 
-            if (prob != 1)
+            if (Math.Abs(prob - 1.0) > E)
             {
                 throw new Exception("Probablity is not equal to 1, check values");
             }
@@ -63,7 +63,7 @@ namespace Core.Distributions
             for (int i = 0; i < _intervals.Count; i++)
             {
                 cumulativeProb += _intervals[i].Probability;
-                if (randomValue < cumulativeProb + E)
+                if (i == _intervals.Count ||  randomValue < cumulativeProb)
                 {
                     if (_randoms == null || _randoms[i] == null) throw new Exception("Generator for random values is null, check inicialization");
                     int returnNumber = GenerateIntNumber(i);
@@ -86,7 +86,7 @@ namespace Core.Distributions
             for (int i = 0; i < _intervals.Count; i++)
             {
                 cumulativeProb += _intervals[i].Probability;
-                if (randomValue < cumulativeProb + E)
+                if (randomValue < cumulativeProb)
                 {
                     if (_randoms == null || _randoms[i] == null) throw new Exception("Generator for random values is null, check inicialization");
                     double returnNumber = GenerateDoubleNumber(i);

@@ -13,6 +13,11 @@ namespace Core.Distributions
         public double Min { get; set; }
         public double Max { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min">Minimum is inclusive - value can be generated</param>
+        /// <param name="max">Maximum is exclusive - value won;t be generated</param>
         public ContinuousUniform(double min, double max)
         {
             Min = min;

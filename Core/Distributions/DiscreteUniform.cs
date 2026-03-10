@@ -13,6 +13,11 @@ namespace Core.Distributions
         public int Min { get; set; }
         public int Max { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="min">Minimum is inclusive - value can be generated</param>
+        /// <param name="max">Maximum is exclusive - value won;t be generated</param>
         public DiscreteUniform(int min, int max)
         {
             Min = min;
@@ -20,7 +25,7 @@ namespace Core.Distributions
             _random = new Random(SeedGen.GetSeed());
         }
 
-        public double NextInt()
+        public int NextInt()
         {
             return _random.Next(Min, Max);
         }
