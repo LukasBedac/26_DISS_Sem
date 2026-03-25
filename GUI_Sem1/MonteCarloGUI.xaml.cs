@@ -37,8 +37,8 @@ namespace GUI_Sem1
 
         private void InitGraphs()
         {
-            PlotModel graph1 = CreateReplicationTimeGraph("Simulation 1 - Z-S-R-D-Z");
-            PlotModel graph2 = CreateReplicationTimeGraph("Simulation 2 - Z-D-R-S-Z");
+            PlotModel graph1 = CreateReplicationTimeGraph("Simulation 1 - Z-D-R-S-Z");
+            PlotModel graph2 = CreateReplicationTimeGraph("Simulation 2 - Z-S-R-D-Z");
             PlotModel graph3 = CreateReplicationTimeGraph("Simulation 3 - Z-S-D-R-Z");
             PlotModel graph4 = CreateReplicationTimeGraph("Simulation 4 - Z-D-S-R-Z");
             PlotModel graph5 = CreateReplicationTimeGraph("Simulation 5 - Z-R-D-S-Z");
