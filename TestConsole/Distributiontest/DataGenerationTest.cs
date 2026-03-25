@@ -18,7 +18,7 @@ namespace TestConsole.Distributiontest
             string path = "DiscreteUniform.csv";
             DiscreteUniform uni = new DiscreteUniform(55, 76);
             using (StreamWriter writer = new StreamWriter(path, append: false))
-            { 
+            {
                 for (int i = 0; i < NumberOfGenerations; i++)
                 {
                     writer.WriteLine(uni.NextInt());
@@ -84,6 +84,34 @@ namespace TestConsole.Distributiontest
                 for (int i = 0; i < NumberOfGenerations; i++)
                 {
                     writer.WriteLine(emp.NextDouble());
+                }
+                writer.Close();
+            }
+        }
+        public void GenerateTriangular()
+        {
+            string path = "Triangular.txt";
+            Scope scope = new Scope(10.0, 35.0, 120.0);
+            Triangular tri = new Triangular(scope);
+            using (StreamWriter writer = new StreamWriter(path, append: false))
+            {
+                for (int i = 0; i < NumberOfGenerations; i++)
+                {
+                    writer.WriteLine(tri.NextDouble());
+                }
+                writer.Close();
+            }
+        }
+
+        public void GenerateExponential()
+        {
+            string path = "Exponential.txt";
+            Exponential exp = new Exponential(12);
+            using (StreamWriter writer = new StreamWriter(path, append: false))
+            {
+                for (int i = 0; i < NumberOfGenerations; i++)
+                {
+                    writer.WriteLine(exp.NextDouble());
                 }
                 writer.Close();
             }
