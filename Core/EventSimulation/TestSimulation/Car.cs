@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.TestSimulation
 {
-    public class Car : Customer
+    public class Car : TimeEntity
     {
         
     }

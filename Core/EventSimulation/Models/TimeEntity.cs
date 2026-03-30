@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Models
 {
-    public class Customer
+    public class TimeEntity
     {
         public double ArrivalTime { get; set; }
         public double LeaveTime { get; set; }

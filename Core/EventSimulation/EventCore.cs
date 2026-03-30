@@ -1,4 +1,6 @@
-﻿using Core.EventSimulation.Models;
+﻿using Core.EventSimulation.Airport;
+using Core.EventSimulation.Airport.Observer;
+using Core.EventSimulation.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,8 +12,12 @@ namespace Core.EventSimulation
 {
     public class EventCore : SimulationCore
     {
+        private List<SimDelegate> _delegates = new();
         public double CurrentTime { get; set; } = 0.0;
-        public double EndTime { get; set; } = 0.0;
+        public double EndTime { get; set; } = 86_400; //24 hours in seconds
+        public bool Paused { get; set; }
+        public bool TurboMode { get; set; }
+        public int SimulationSpeed { get; set; } = 200;
         /// <summary>
         /// Event, where priority is time of the event
         /// </summary>
@@ -28,7 +34,16 @@ namespace Core.EventSimulation
         {
             while (Events.Count > 0 && !Stopped && CurrentTime < EndTime)
             {
-                //pause here
+                while (Paused)
+                {
+                    Thread.Sleep(250);
+                }
+
+                if (!TurboMode)
+                {
+                    Thread.Sleep(SimulationSpeed);
+                    RefreshGUI();
+                }
 
                 ActualEvent = Events.Dequeue();
                 CurrentTime = ActualEvent.Time;
@@ -61,6 +76,18 @@ namespace Core.EventSimulation
         public override void AfterReplication()
         {
             Events.Clear();
+        }
+
+        public void AddDelegates(SimDelegate _delegate)
+        {
+            _delegates.Add(_delegate);
+        }
+        public void RefreshGUI()
+        {
+            foreach (SimDelegate _delegate in _delegates)
+            {
+                _delegate.Refresh((AirportSimulation)this);
+            }
         }
     }
 }

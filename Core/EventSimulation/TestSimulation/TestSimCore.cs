@@ -25,7 +25,7 @@ namespace Core.EventSimulation.TestSimulation
 
 
         //Fields
-        public Customer CurrentCustomer { get; set; }
+        public TimeEntity CurrentCustomer { get; set; }
         public StatQueue<Car> ServiceQueue { get; set; }
         public bool IsBusy { get; set; }
 

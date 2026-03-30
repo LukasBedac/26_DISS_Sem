@@ -5,7 +5,6 @@
         public const int NUMBEROFPOINTS = 1000; 
         public int Replications { get; set; }
         public bool Stopped { get; set; }
-        public bool Paused { get; set; }
         public int ActualReplication { get; set; }
 
         public virtual void BeforeSimulation() { }
