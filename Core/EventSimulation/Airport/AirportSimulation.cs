@@ -95,10 +95,20 @@ namespace Core.EventSimulation.Airport
         {
             ArrivalGenerator = new Exponential(50);
             MetalDetectorDurationGenerator = new ContinuousUniform(6, 27);
+
             RontgenMachineDurationGenerator = new ContinuousUniform(9, 46);
             Scope personalCheckScope = new Scope(10.0, 35.0, 120.0); 
+
             PersonalCheckDurationGenerator = new Triangular(personalCheckScope);
             PersonalCheckGenerator = new Random(SeedGen.GetSeed());
+
+            List<Scope> crateNumberScopes = new List<Scope>
+            {
+                new Scope(0, 1, 0.15 ),
+                new Scope(1, 2, 0.68 ),
+                new Scope(2, 3, 0.17 )
+            };
+            NumberOfCratesPerPersonGenerator = new Empiric(true, crateNumberScopes);
         }
     }
 }

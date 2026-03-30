@@ -9,6 +9,8 @@ namespace Core.EventSimulation.Airport.Models
 {
     public class Customer : TimeEntity
     {
+        public int ID { get; set; }
+        public List<int> CratesID { get; set; } = new List<int>();
 
     }
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFComponentsLibrary", "WPFComponentsLibrary\WPFComponentsLibrary.csproj", "{92CF7E96-8C3A-4DC9-820F-EFBD4E0EAE19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimGUI", "AirportSimGUI\AirportSimGUI.csproj", "{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{92CF7E96-8C3A-4DC9-820F-EFBD4E0EAE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92CF7E96-8C3A-4DC9-820F-EFBD4E0EAE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92CF7E96-8C3A-4DC9-820F-EFBD4E0EAE19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
