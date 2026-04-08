@@ -12,7 +12,7 @@ namespace Core.Helpers
         private static int _beltID = 0;
         private static int _employeeID = 0;
         private static int _customerID = 0;
-        private static int _crateID = 0;
+        private static int _luggageID = 0;
         public static int GetBeltID()
         {
             return _beltID++;
@@ -25,9 +25,16 @@ namespace Core.Helpers
         {
             return _customerID++;
         }
-        public static int GetCrateID()
+        public static int GetLuggageID()
         {
-            return _crateID++;
+            return _luggageID++;
+        }
+        public static void ResetIDs()
+        {
+            _beltID = 0;
+            _employeeID = 0;
+            _customerID = 0;
+            _luggageID = 0;
         }
     }
 }

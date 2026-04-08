@@ -1,4 +1,5 @@
 ﻿using Core.EventSimulation.Airport;
+using Core.EventSimulation.Airport.Events;
 using Core.EventSimulation.Airport.Observer;
 using Core.EventSimulation.Models;
 using System;
@@ -15,9 +16,13 @@ namespace Core.EventSimulation
         private List<SimDelegate> _delegates = new();
         public double CurrentTime { get; set; } = 0.0;
         public double EndTime { get; set; } = 86_400; //24 hours in seconds
+        public double WarmUpLength { get; set; } = 12 * 3600; //12 hours in seconds
+
         public bool Paused { get; set; }
         public bool TurboMode { get; set; }
         public int SimulationSpeed { get; set; } = 200;
+        public int SleepInterval { get; set; }
+        public int SleepMs { get; set; }
         /// <summary>
         /// Event, where priority is time of the event
         /// </summary>
@@ -28,6 +33,7 @@ namespace Core.EventSimulation
         public EventCore(int replications) : base()
         {
             Replications = replications;
+            EndTime += WarmUpLength;
         }
 
         public override void OneReplication()
@@ -39,17 +45,10 @@ namespace Core.EventSimulation
                     Thread.Sleep(250);
                 }
 
-                if (!TurboMode)
-                {
-                    Thread.Sleep(SimulationSpeed);
-                    RefreshGUI();
-                }
-
                 ActualEvent = Events.Dequeue();
                 CurrentTime = ActualEvent.Time;
                 ActualEvent.Execute();
             }
-            ActualReplication++;
         }
 
         public void PlanEvent(Event _event)
@@ -63,19 +62,21 @@ namespace Core.EventSimulation
                 Events.Enqueue(_event, _event.Time);
             }
         }
+        protected void StartWatch()
+        {
+            SleepEvent sleepEvent = new SleepEvent(this, CurrentTime, SleepMs, SleepInterval);
+            PlanEvent(sleepEvent);
+        }
 
         public override void BeforeSimulation()
         {
             //First customer here
+            
         }
 
         public override void BeforeReplication()
         {
             CurrentTime = 0.0;
-        }
-        public override void AfterReplication()
-        {
-            Events.Clear();
         }
 
         public void AddDelegates(SimDelegate _delegate)
