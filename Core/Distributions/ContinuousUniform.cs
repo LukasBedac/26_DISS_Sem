@@ -10,8 +10,8 @@ namespace Core.Distributions
     public class ContinuousUniform
     {
         private readonly Random _random;
-        public double Min { get; set; }
-        public double Max { get; set; }
+        private double _min;
+        private double _max;
 
         /// <summary>
         /// 
@@ -20,14 +20,14 @@ namespace Core.Distributions
         /// <param name="max">Maximum is exclusive - value won;t be generated</param>
         public ContinuousUniform(double min, double max)
         {
-            Min = min;
-            Max = max;
+            _min = min;
+            _max = max;
             _random = new Random(SeedGen.GetSeed());
         }
 
         public double NextDouble()
         {
-            return Min + (_random.NextDouble() * (Max - Min));
+            return _min + (_random.NextDouble() * (_max - _min));
         }
     }
 }

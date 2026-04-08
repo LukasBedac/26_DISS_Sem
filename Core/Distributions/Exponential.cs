@@ -13,7 +13,7 @@ namespace Core.Distributions
         private Random _random;
         public Exponential(double ratePerHour)
         {
-            _lambda = 1.0/ratePerHour;
+            _lambda = ratePerHour;
             _random = new Random(SeedGen.GetSeed());
         }
         public double NextDouble()

@@ -10,8 +10,8 @@ namespace Core.Distributions
     public class DiscreteUniform
     {
         private readonly Random _random;
-        public int Min { get; set; }
-        public int Max { get; set; }
+        private int _min;
+        private int _max;
 
         /// <summary>
         /// 
@@ -20,14 +20,14 @@ namespace Core.Distributions
         /// <param name="max">Maximum is exclusive - value won;t be generated</param>
         public DiscreteUniform(int min, int max)
         {
-            Min = min;
-            Max = max;
+            _min = min;
+            _max = max;
             _random = new Random(SeedGen.GetSeed());
         }
 
         public int NextInt()
         {
-            return _random.Next(Min, Max);
+            return _random.Next(_min, _max);
         }
     }
 }
