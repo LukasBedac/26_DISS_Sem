@@ -24,8 +24,14 @@ namespace WPFComponentsLibrary
         public string ReplicationPoints { get; set; }
         public string ReplicationCut { get; set; } = string.Empty;
         public string TimeMultiplier { get; set; }
+        public double TimeMultiplierValue { get; set; }
         public bool Stop { get; set; } = false;
+        public bool Paused { get; set; } = false;
+
         public static event Action OnStopRequest;
+        public static event Action OnPauseRequest;
+        public static event Action OnResumeRequest;
+        public static event Action OnSpeedChangeRequest;
 
         private readonly Dictionary<Time, double> _timeMultipliers = new()
         {
@@ -110,6 +116,8 @@ namespace WPFComponentsLibrary
             if (cmbTime.SelectedItem is ComboBoxItem item && item.Tag != null)
             {
                 cmbTime.ToolTip = $"Multiplier: {item.Tag.ToString()}";
+                TimeMultiplierValue = double.TryParse(item.Tag.ToString(), out double value) ? value : 1;
+                OnSpeedChangeRequest?.Invoke();
             }
         }
 
@@ -128,6 +136,27 @@ namespace WPFComponentsLibrary
         public void ResetStopButton()
         {
             btnStop.IsEnabled = true;
+        }
+
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            Paused = true;
+            btnPause.IsEnabled = false;
+            btnResume.IsEnabled = true;
+            OnPauseRequest?.Invoke();
+        }
+
+        private void Resume_Click(object sender, RoutedEventArgs e)
+        {
+            Paused = false;
+            btnResume.IsEnabled = false;
+            btnPause.IsEnabled = true;
+            OnResumeRequest?.Invoke();
+        }
+
+        private void ReplicationPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ReplicationPoints = txtReplicationPoints.Text;
         }
     }
 }

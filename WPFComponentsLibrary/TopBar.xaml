@@ -19,8 +19,8 @@
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Width="50" Height="20" Content="Pause"></Button>
-            <Button Grid.Column="1" Width="50" Height="20" Content="Resume"></Button>
+            <Button x:Name="btnPause" Grid.Column="0" Width="50" Height="20" Content="Pause" Click="Pause_Click"></Button>
+            <Button x:Name="btnResume" Grid.Column="1" Width="50" Height="20" Content="Resume" Click="Resume_Click"></Button>
             <Button x:Name="btnStop" Grid.Column="2" Width="50" Height="20" Content="Stop" Click="Stop_Click"></Button>
 
             <TextBlock Grid.Column="3" Grid.ColumnSpan="2" Height="20" Margin="0,-30,0,0" Text="Replications" HorizontalAlignment="Center"></TextBlock>
@@ -34,7 +34,7 @@
             <TextBox x:Name="txtReplicationsPercent" Grid.Column="5" Height="20" Width="70" HorizontalAlignment="Center" Text="20" TextChanged="ReplicationsPercent_TextChanged"></TextBox>
 
             <TextBlock Grid.Column="6" Height="20" Margin="0,-30,0,0" Text="Replication points" HorizontalAlignment="Center"></TextBlock>
-            <TextBox x:Name="txtReplicationPoints" Grid.Column="6" Height="20" Width="70" HorizontalAlignment="Center" IsEnabled="False"></TextBox>
+            <TextBox x:Name="txtReplicationPoints" Grid.Column="6" Height="20" Width="70" HorizontalAlignment="Center" TextChanged="ReplicationPoints_TextChanged"></TextBox>
 
             <TextBlock Grid.Column="7" Height="20" Margin="0,-30,0,0" Text="Time" HorizontalAlignment="Center"></TextBlock>
             <ComboBox x:Name="cmbTime" Grid.Column="7" Width="70" Height="20">
