@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Airport.Events
 {
-    public class CrateRontgenStart : Event
+    public class WarmUpEndEvent : Event
     {
-        public CrateRontgenStart(EventCore core, double time) : base(core, time)
+        public WarmUpEndEvent(EventCore core, double time) : base(core, time)
         {
+        }
+
+        public override void Execute()
+        {
+            ((AirportSimulation)Core).EndWarmUp();
         }
     }
 }

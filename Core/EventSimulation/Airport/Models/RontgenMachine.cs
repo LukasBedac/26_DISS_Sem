@@ -10,7 +10,7 @@ namespace Core.EventSimulation.Airport.Models
     public class RontgenMachine : TimeEntity
     {
         public int ID { get; set; }
-        public int CrateID { get; set; }
+        public Luggage ActualLuggage { get; set; }
         public bool IsBusy { get; set; } = false;
     }
 }

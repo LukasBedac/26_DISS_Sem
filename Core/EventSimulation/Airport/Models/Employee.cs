@@ -9,5 +9,8 @@ namespace Core.EventSimulation.Airport.Models
 {
     public class Employee : TimeEntity
     {
+        public int ID { get; set; }
+        public bool IsBusy { get; set; }
+        public Customer ActualCustomer { get; set; }
     }
 }

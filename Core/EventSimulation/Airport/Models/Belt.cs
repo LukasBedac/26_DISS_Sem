@@ -3,7 +3,9 @@ using Core.EventSimulation.Statistics;
 using Core.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,20 +13,25 @@ namespace Core.EventSimulation.Airport.Models
 {
     public class Belt : TimeEntity
     {
-        private int _maxCrates;
+        private int _maxLuggage;
         public int ID { get; set; }
-        public int CrateID { get; set; }
-        public StatQueue<Crate> Crates { get; set; }
+        public StatQueue<Luggage> Luggage { get; set; }
 
-        public Belt(int maxCrates, EventCore core) 
+        public Belt(int maxLuggage, EventCore core)
         {
             ID = IDGenerator.GetBeltID();
-            _maxCrates = maxCrates;
-            Crates = new StatQueue<Crate>(core);
-            for (int i = 0; i < maxCrates; i++)
-            {
-                Crates.Enqueue(new Crate(ID));
-            }
+            _maxLuggage = maxLuggage;
+            Luggage = new StatQueue<Luggage>(core, maxLuggage);
+        }
+
+        public bool IsFull()
+        {
+            return Luggage.Queue.Count >= _maxLuggage;
+        }
+
+        public List<Luggage> GetAllLuggage()
+        {
+            return Luggage.Queue.ToList();
         }
     }
 }

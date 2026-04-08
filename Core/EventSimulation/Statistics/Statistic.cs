@@ -56,5 +56,9 @@ namespace Core.EventSimulation.Statistics
             _sumValuesSquared = 0.0;
             _numberOfValues = 0;
         }
+        public int GetNumberOfValues()
+        {
+            return _numberOfValues;
+        }
     }
 }

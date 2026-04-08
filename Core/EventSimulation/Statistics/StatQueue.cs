@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +11,23 @@ namespace Core.EventSimulation.Statistics
     {
         private EventCore _core;
         private WeightedStatistic _weightedStatistic = new WeightedStatistic();
+        private Statistic _statistic = new Statistic();
         private double _lastChangeInQueue = 0.0;
-        public Queue<T> Queue { get; set; } = new Queue<T>();
+        public Queue<T> Queue { get; set; }
         public double AverageQueueLength => _weightedStatistic.Mean;
-
-        public StatQueue(EventCore core)
+        public double ReplicationMean => _statistic.Mean;
+        public (double, double) ConfidenceInterval90 => _statistic.ConfidenceInterval90();
+        public StatQueue(EventCore core, int maxCapacity = 0)
         {
             _core = core;
             _lastChangeInQueue = _core.CurrentTime;
+            if (maxCapacity > 0)
+            {
+                Queue = new Queue<T>(maxCapacity);
+            } else
+            {
+                Queue = new Queue<T>();
+            }
         }
 
         public void Enqueue(T item)
@@ -45,6 +55,16 @@ namespace Core.EventSimulation.Statistics
 
             _weightedStatistic.AddValue(queueLength, timeInterval);
             _lastChangeInQueue = _core.CurrentTime;
+        }
+
+        public bool IsFull()
+        {
+            return Queue.Count >= Queue.Capacity;
+        }
+
+        public List<T> GetAll()
+        {
+            return Queue.ToList();
         }
     }
 }
