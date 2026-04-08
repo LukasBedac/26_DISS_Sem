@@ -1,20 +1,288 @@
-﻿<Window x:Class="AirportSimGUI.MainWindow"
+<Window x:Class="GUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AirportSimGUI" xmlns:wpfcomponentslibrary="clr-namespace:WPFComponentsLibrary;assembly=WPFComponentsLibrary"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:local="clr-namespace:GUI"
+        xmlns:tb="clr-namespace:WPFComponentsLibrary;assembly=WPFComponentsLibrary"
+        Title="Airport Security Simulation"
+        Height="900" Width="1600"
+        MinHeight="700" MinWidth="1200"
+        WindowStartupLocation="CenterScreen">
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <wpfcomponentslibrary:TopBar Grid.Column="0" Grid.ColumnSpan="2"></wpfcomponentslibrary:TopBar>
+
+        <!-- TOPBAR -->
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <tb:TopBar x:Name="topBar" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0" Margin="10, 20, 10, 10"></tb:TopBar>
+                <TextBlock Grid.Column="1" VerticalAlignment="Top" Text="Time" Margin="0,5,0,0"></TextBlock>
+                <TextBlock x:Name="txtTime" Grid.Column="1" VerticalAlignment="Center" ></TextBlock>
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnStart" Grid.Column="0" Content="Start" Click="btnStart_Click"  Width="50" ></Button>
+
+                <TextBlock Grid.Column="1" Text="Input Belt Max:" Height="20" Margin="10,0,0,0"></TextBlock>
+                <TextBox x:Name="txtInputBeltMax" Grid.Column="2" Height="20" Width="30" Margin="10,0,0,0"></TextBox>
+
+                <TextBlock Grid.Column="3" Text="Output Belt Max:" Height="20" Margin="10,0,0,0"></TextBlock>
+                <TextBox x:Name="txtOutputBeltMax" Grid.Column="4" Height="20" Width="30" Margin="10,0,0,0"></TextBox>
+
+                <CheckBox x:Name="chckBoxTurboMode" Grid.Column="6" VerticalAlignment="Center" Content="Turbo mode" Margin="10,0,0,0" IsChecked="True"></CheckBox>
+
+                <TextBlock Grid.Column="7" Text="Sleep ms:" Height="20" Margin="10,0,0,0"></TextBlock>
+                <TextBox x:Name="txtSleepMs" Grid.Column="8" Height="20" Width="50" Margin="10,0,0,0"></TextBox>
+
+                <TextBlock Grid.Column="9" Text="Sleep Interval:" Height="20" Margin="10,0,0,0"></TextBlock>
+                <TextBox x:Name="txtSleepInterval" Grid.Column="10" Height="20" Width="50" Margin="10,0,0,0"></TextBox>
+
+                
+            </Grid>
+        </StackPanel>
+        
+        <!-- LINE 1 -->
+        <Border Grid.Column="0" Margin="10, 40, 10, 10" BorderBrush="Black" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Text="LINE 1"></TextBlock>
+        
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Customers"></TextBlock>
+                <DataGrid x:Name="Line1CustomerGrid" Grid.Column="0" Grid.Row="3" MinHeight="150" MaxHeight="150">
+                </DataGrid>
+        
+                <TextBlock Grid.Column="0" Grid.Row="4" Text="Input Belt Luggage"></TextBlock>
+                <DataGrid x:Name="Line1InputBeltGrid" Grid.Column="0" Grid.Row="5" MinHeight="100" MaxHeight="100">
+                </DataGrid>
+                
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="0" Grid.Row="6" Text="Rontgen Machine"></TextBlock>
+                        <TextBlock x:Name="Line1RontgenMachine"  Grid.Column="0" Grid.Row="7" Text="IDLE" />
+                    </StackPanel>
+                </Border>
+                
+                <TextBlock Grid.Column="0" Grid.Row="8" Text="Output Belt Luggage"></TextBlock>
+                <DataGrid x:Name="Line1OutputBeltGrid" Grid.Column="0" Grid.Row="9" MinHeight="100" MaxHeight="100">
+                </DataGrid>
+
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="0" Grid.Row="9" Text="Metal Detector"></TextBlock>
+                        <TextBlock x:Name="Line1MetalDetector"  Grid.Column="0" Grid.Row="10" Text="IDLE" />
+                    </StackPanel>
+                </Border>
+                
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="0" Grid.Row="11" Text="Personal Check"></TextBlock>
+                        <TextBlock x:Name="Line1PersonalCheck" Text="IDLE" />
+                     </StackPanel>
+                </Border>
+                
+                <TextBlock Grid.Column="0" Grid.Row="13" Text="Luggage pickup"></TextBlock>
+                <DataGrid x:Name="Line1LuggagePickUpGrid" Grid.Column="0" Grid.Row="14" MinHeight="70" MaxHeight="70">
+                    
+                </DataGrid>
+
+                <Grid Grid.Column="0" Grid.Row="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Log LINE1"></TextBlock>
+                    <TextBlock Grid.Column="1" Text="Log EVENTS1"></TextBlock>
+                </Grid>
+
+                <Grid Grid.Column="0" Grid.Row="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="Line1ListBox" Grid.Column="0" MinHeight="100" MaxHeight="100"></ListBox>
+                    <ListBox x:Name="Line1ListBoxEvents" Grid.Column="1" MinHeight="100" MaxHeight="100"></ListBox>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+        
+        <!-- LINE 2 -->
+        <Border Grid.Column="1" Margin="10, 40, 10, 10"  BorderBrush="Black" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Text="LINE 2"></TextBlock>
+        
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="Customers"></TextBlock>
+                <DataGrid x:Name="Line2CustomerGrid" Grid.Column="1" Grid.Row="3" MinHeight="150" MaxHeight="150">
+                </DataGrid>
+        
+                <TextBlock Grid.Column="1" Grid.Row="4" Text="Input Belt Luggage"></TextBlock>
+                <DataGrid x:Name="Line2InputBeltGrid" Grid.Column="1" Grid.Row="5" MinHeight="100" MaxHeight="100">
+                </DataGrid>
+
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="1" Grid.Row="6" Text="Rontgen Machine"></TextBlock>
+                        <TextBlock x:Name="Line2RontgenMachine"  Grid.Column="0" Grid.Row="7" Text="IDLE" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Grid.Column="1" Grid.Row="8" Text="Output Belt Luggage"></TextBlock>
+                <DataGrid x:Name="Line2OutputBeltGrid" Grid.Column="0" Grid.Row="9" MinHeight="100" MaxHeight="100">
+                </DataGrid>
+
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="1" Grid.Row="9" Text="Metal Detector"></TextBlock>
+                        <TextBlock x:Name="Line2MetalDetector"  Grid.Column="0" Grid.Row="10" Text="IDLE" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Grid.Column="1" Grid.Row="11" Text="Personal Check"></TextBlock>
+                        <TextBlock x:Name="Line2PersonalCheck" Text="IDLE" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Grid.Column="1" Grid.Row="13" Text="Luggage pickup"></TextBlock>
+                <DataGrid x:Name="Line2LuggagePickUpGrid" Grid.Column="1" Grid.Row="14" MinHeight="70" MaxHeight="70"></DataGrid>
+
+                <Grid Grid.Column="1" Grid.Row="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Log LINE2"></TextBlock>
+                    <TextBlock Grid.Column="1" Text="Log EVENTS2"></TextBlock>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="Line2ListBox" Grid.Column="0" MinHeight="100" MaxHeight="100"></ListBox>
+                    <ListBox x:Name="Line2ListBoxEvents" Grid.Column="1" MinHeight="100" MaxHeight="100"></ListBox>
+                </Grid>
+            </StackPanel>
+        </Border>
+        
+        <!-- STATS -->
+
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="15" BorderThickness="1" BorderBrush="Black" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="150"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="150"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="150"></ColumnDefinition>
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                    <ColumnDefinition Width="250"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="STATS" Grid.Row="0" Grid.Column="0"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Average time in system - customers"></TextBlock>
+                <TextBox x:Name="txtAverageTimePeople" Grid.Row="1" Grid.Column="1" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Number of people - full check"></TextBlock>
+                <TextBox x:Name="txtAllPeople" Grid.Row="2" Grid.Column="1" Margin="0,0,5,0"></TextBox>
+
+                <!--<TextBlock Grid.Row="3" Grid.Column="0" Text="Average  time in system - luggage"></TextBlock>
+                <TextBox x:Name="txtAverageTimeLuggage" Grid.Row="3" Grid.Column="1" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Number of luggage - full check"></TextBlock>
+                <TextBox x:Name="txtAllLuggage" Grid.Row="4" Grid.Column="1" Margin="0,0,5,0"></TextBox>-->
+                
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Average Arrival queue length"></TextBlock>
+                <TextBox x:Name="txtAverageArrivalLength" Grid.Row="1" Grid.Column="3" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Average MetalDetector queue length"></TextBlock>
+                <TextBox x:Name="txtAverageMetalDetectorLength" Grid.Row="2" Grid.Column="3" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Average PickUp queue length"></TextBlock>
+                <TextBox x:Name="txtAveragePickUpLength" Grid.Row="3" Grid.Column="3" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="Average InputBelt queue length"></TextBlock>
+                <TextBox x:Name="txtAverageInputBeltLength" Grid.Row="1" Grid.Column="5" Margin="0,0,5,0"></TextBox>
+
+                <TextBlock Grid.Row="2" Grid.Column="4" Text="Average OutputBelt queue length"></TextBlock>
+                <TextBox x:Name="txtAverageOutputBeltLength" Grid.Row="2" Grid.Column="5" Margin="0,0,5,0"></TextBox>
+
+
+                <CheckBox x:Name="chckBoxExperiment" Grid.Row="0" Grid.Column="6" Content="Start Experiment" HorizontalAlignment="Center" Margin="0,1.5,0,0"></CheckBox>
+                <Button x:Name="btnShowGraph" Grid.Row="1" Grid.Column="6" Content="Show Graph Window" Click="ShowGraph_Click"></Button>
+                <Button x:Name="btnStartGraph" Grid.Row="2" Grid.Column="6" Content="Start Graph" Click="StartGraph_Click"></Button>
+
+                <DockPanel Grid.Row="0" Grid.Column="7" Margin="10,0,0,0">
+                    <TextBlock Grid.Row="0" Grid.Column="7" Text="Capacity: "></TextBlock>
+                    <TextBox x:Name="txtCapacity" Grid.Row="0" Grid.Column="8"></TextBox>
+                </DockPanel>
+
+                <DockPanel Grid.Row="1" Grid.Column="7" Margin="10,0,0,0">
+                    <TextBlock Grid.Row="0" Grid.Column="7" Text="Graph % surrounding: "></TextBlock>
+                    <TextBox x:Name="txtPercentGraph" Grid.Row="0" Grid.Column="8"></TextBox>
+                </DockPanel>
+
+                <DockPanel Grid.Row="2" Grid.Column="7" Margin="10,0,0,0">
+                    <TextBlock Text="Actual Replication:" HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock x:Name="txtActualReplication" Height="20" Width="50" HorizontalAlignment="Right"></TextBlock>
+                </DockPanel>
+
+                <DockPanel Grid.Row="3" Grid.Column="7" Margin="10,0,0,0">
+                    <TextBlock Grid.Row="0" Grid.Column="7" Text="Sim status: "></TextBlock>
+                    <TextBlock x:Name="txtSimStatus" Grid.Row="0" Grid.Column="8"></TextBlock>
+                </DockPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
