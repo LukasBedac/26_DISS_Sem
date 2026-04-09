@@ -188,7 +188,7 @@ namespace Core.EventSimulation.Airport
             }
             else
             {
-                ArrivalGenerator = new Exponential(240.0 / 3600.0);
+                ArrivalGenerator = new Exponential(StartingCustomersNumber / 86_400.0);
             }
 
             MetalDetectorDurationGenerator = new ContinuousUniform(6, 27);
@@ -329,6 +329,9 @@ namespace Core.EventSimulation.Airport
         public void EndWarmUp()
         {
             SetStatistics();
+
+            ArrivalQueue1.Clear();
+            ArrivalQueue2.Clear();
 
             AllCustomersNumber = 0;
             ArrivalQueueStat = new Statistic();

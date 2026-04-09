@@ -44,7 +44,7 @@ namespace Core.EventSimulation.Statistics
 
         public void Clear()
         {
-            Queue.Clear();
+            //Queue.Clear();
             _weightedStatistic.ClearValues();
             _lastChangeInQueue = 0.0;
         }
