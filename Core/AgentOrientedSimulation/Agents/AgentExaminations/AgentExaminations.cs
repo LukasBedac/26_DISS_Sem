@@ -23,8 +23,8 @@ namespace Agents.AgentExaminations
 		private void Init()
 		{
 			new ManagerExaminations(SimId.ManagerExaminations, MySim, this);
-			new InitialExamination(SimId.InitialExamination, MySim, this);
 			new Examination(SimId.Examination, MySim, this);
+			new InitialExamination(SimId.InitialExamination, MySim, this);
 			AddOwnMessage(Mc.InitalExamination);
 			AddOwnMessage(Mc.Examination);
 		}

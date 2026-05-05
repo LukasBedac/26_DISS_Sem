@@ -27,8 +27,8 @@ namespace Agents.AgentEnv
 		private void Init()
 		{
 			new ManagerEnv(SimId.ManagerEnv, MySim, this);
-			new SchedulerByFoot(SimId.SchedulerByFoot, MySim, this);
 			new Schedulermbulance(SimId.Schedulermbulance, MySim, this);
+			new SchedulerByFoot(SimId.SchedulerByFoot, MySim, this);
 			AddOwnMessage(Mc.PatientDeparture);
 		}
 		//meta! tag="end"

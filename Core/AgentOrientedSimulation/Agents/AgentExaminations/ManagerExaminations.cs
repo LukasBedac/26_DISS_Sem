@@ -68,6 +68,10 @@ namespace Agents.AgentExaminations
 		{
 			switch (message.Code)
 			{
+			case Mc.Examination:
+				ProcessExamination(message);
+			break;
+
 			case Mc.Finish:
 				switch (message.Sender.Id)
 				{
@@ -83,10 +87,6 @@ namespace Agents.AgentExaminations
 
 			case Mc.InitalExamination:
 				ProcessInitalExamination(message);
-			break;
-
-			case Mc.Examination:
-				ProcessExamination(message);
 			break;
 
 			default:

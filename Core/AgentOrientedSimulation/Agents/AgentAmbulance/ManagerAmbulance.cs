@@ -135,16 +135,16 @@ namespace Agents.AgentAmbulance
 		{
 			switch (message.Code)
 			{
-			case Mc.FreeAmbulance:
-				ProcessFreeAmbulance(message);
-			break;
-
 			case Mc.RequestAmbulanceAllocationA:
 				ProcessRequestAmbulanceAllocationA(message);
 			break;
 
 			case Mc.RequestAmbulanceAllocationB:
 				ProcessRequestAmbulanceAllocationB(message);
+			break;
+
+			case Mc.FreeAmbulance:
+				ProcessFreeAmbulance(message);
 			break;
 
 			default:

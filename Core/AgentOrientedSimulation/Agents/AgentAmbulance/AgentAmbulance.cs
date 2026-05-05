@@ -1,7 +1,7 @@
-using Core.AgentOrientedSimulation.Models;
-using Core.AgentOrientedSimulation.Models.IDGen;
 using OSPABA;
 using Simulation;
+using Core.AgentOrientedSimulation.Models;
+using Core.AgentOrientedSimulation.Models.IDGen;
 
 namespace Agents.AgentAmbulance
 {

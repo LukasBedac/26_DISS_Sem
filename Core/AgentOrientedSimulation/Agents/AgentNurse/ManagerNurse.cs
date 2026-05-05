@@ -70,12 +70,12 @@ namespace Agents.AgentNurse
 		{
 			switch (message.Code)
 			{
-			case Mc.RequestNurseAllocation:
-				ProcessRequestNurseAllocation(message);
-			break;
-
 			case Mc.FreeNurse:
 				ProcessFreeNurse(message);
+			break;
+
+			case Mc.RequestNurseAllocation:
+				ProcessRequestNurseAllocation(message);
 			break;
 
 			default:

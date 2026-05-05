@@ -68,12 +68,12 @@ namespace Agents.AgentDoctor
 		{
 			switch (message.Code)
 			{
-			case Mc.FreeDoctor:
-				ProcessFreeDoctor(message);
-			break;
-
 			case Mc.RequestDoctorAllocation:
 				ProcessRequestDoctorAllocation(message);
+			break;
+
+			case Mc.FreeDoctor:
+				ProcessFreeDoctor(message);
 			break;
 
 			default:

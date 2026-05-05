@@ -1,7 +1,7 @@
-using Core.AgentOrientedSimulation.Models;
-using Core.AgentOrientedSimulation.Models.Stats;
 using OSPABA;
 using Simulation;
+using Core.AgentOrientedSimulation.Models;
+using Core.AgentOrientedSimulation.Models.Stats;
 
 namespace Agents.AgentHospital
 {

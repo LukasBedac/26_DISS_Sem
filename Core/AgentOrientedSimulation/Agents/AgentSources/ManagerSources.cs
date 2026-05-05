@@ -96,6 +96,11 @@ namespace Agents.AgentSources
 			}
 		}
 
+		//meta! sender="AgentOfUrgent", id="85", type="Notice"
+		public void ProcessFreeResource(MessageForm message)
+		{
+		}
+
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		public void Init()
 		{
@@ -105,12 +110,12 @@ namespace Agents.AgentSources
 		{
 			switch (message.Code)
 			{
-			case Mc.RequestResource:
-				ProcessRequestResource(message);
+			case Mc.FreeResource:
+				ProcessFreeResource(message);
 			break;
 
-			case Mc.RequestAmbulanceAllocationA:
-				ProcessRequestAmbulanceAllocationA(message);
+			case Mc.RequestResource:
+				ProcessRequestResource(message);
 			break;
 
 			case Mc.RequestDoctorAllocation:
@@ -119,6 +124,10 @@ namespace Agents.AgentSources
 
 			case Mc.RequestAmbulanceAllocationB:
 				ProcessRequestAmbulanceAllocationB(message);
+			break;
+
+			case Mc.RequestAmbulanceAllocationA:
+				ProcessRequestAmbulanceAllocationA(message);
 			break;
 
 			case Mc.RequestNurseAllocation:

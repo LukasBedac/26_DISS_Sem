@@ -230,6 +230,10 @@ namespace Agents.AgentOfUrgent
 				ProcessRequestResource(message);
 			break;
 
+			case Mc.Examination:
+				ProcessExamination(message);
+			break;
+
 			case Mc.Transfer:
 				ProcessTransfer(message);
 			break;
@@ -240,10 +244,6 @@ namespace Agents.AgentOfUrgent
 
 			case Mc.InitalExamination:
 				ProcessInitalExamination(message);
-			break;
-
-			case Mc.Examination:
-				ProcessExamination(message);
 			break;
 
 			default:

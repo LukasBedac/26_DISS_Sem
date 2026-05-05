@@ -1,6 +1,6 @@
-using Core.AgentOrientedSimulation.Models;
 using OSPABA;
 using Simulation;
+using Core.AgentOrientedSimulation.Models;
 
 namespace Agents.AgentDoctor
 {

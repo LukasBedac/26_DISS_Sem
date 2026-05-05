@@ -12,6 +12,7 @@ namespace Simulation
 		public const int PatientArrival = 1001;
 		public const int PatientDeparture = 1002;
 		public const int PatientExamination = 1003;
+		public const int FreeResource = 1027;
 		public const int RequestAmbulanceAllocationA = 1004;
 		public const int RequestAmbulanceAllocationB = 1005;
 		public const int RequestNurseAllocation = 1007;

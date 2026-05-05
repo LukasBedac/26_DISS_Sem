@@ -22,6 +22,7 @@ namespace Agents.AgentSources
 		private void Init()
 		{
 			new ManagerSources(SimId.ManagerSources, MySim, this);
+			AddOwnMessage(Mc.FreeResource);
 			AddOwnMessage(Mc.RequestNurseAllocation);
 			AddOwnMessage(Mc.RequestResource);
 			AddOwnMessage(Mc.RequestDoctorAllocation);

@@ -38,8 +38,8 @@ namespace Agents.AgentEnv
 			MyAgent.PatientTimeInSystem.AddValue(MySim.CurrentTime - myMessage.Patient.ArrivalTime);
         }
 
-        //meta! sender="SchedulerByFoot", id="9", type="Finish"
-        public void ProcessFinishSchedulerByFoot(MessageForm message)
+		//meta! sender="SchedulerByFoot", id="9", type="Finish"
+		public void ProcessFinishSchedulerByFoot(MessageForm message)
 		{
 			message.Addressee = MyAgent.Parent;
 			Notice(message);
