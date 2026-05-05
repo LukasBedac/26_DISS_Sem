@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Airport.Models
 {
-    public class RontgenMachine : TimeEntity
+    public class RontgenMachine : Entity
     {
         public int ID { get; set; }
         public Luggage ActualLuggage { get; set; }

@@ -1,0 +1,135 @@
+<Window x:Class="HospitalSimGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HospitalSimGUI" 
+        xmlns:wpfcomponentslibrary="clr-namespace:WPFComponentsLibrary;assembly=WPFComponentsLibrary"
+        mc:Ignorable="d"
+        Title="Hospital Simulation" Height="800" Width="1200">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <wpfcomponentslibrary:TopBar x:Name="topBar" Grid.Column="0"/>
+
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Grid.Row="0">
+                    <TextBlock Width="100" Height="30" Text="Time " Margin="5, 5, 5, 0" TextAlignment="Center"></TextBlock>
+                    <TextBlock x:Name="txtTime" Width="100" Height="30" Margin="5, -10, 5, 0"></TextBlock>
+                </StackPanel>
+
+                <CheckBox Grid.Column="1" Grid.Row="0" Height="30" Content="Turbo Mode" VerticalAlignment="Center" Margin="5, 25, 5, 0"></CheckBox>
+
+                <StackPanel Grid.Column="2" Grid.Row="0">
+                    <TextBlock Width="100" Height="30" Text="Number of nurses: " Margin="5, 5, 5, 0"></TextBlock>
+                    <TextBox x:Name="txtNurses" Width="100" Height="30" Margin="5, -10, 5, 0"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Grid.Row="0">
+                    <TextBlock Width="100" Height="30" Text="Number of doctors: " Margin="5, 5, 5, 0"></TextBlock>
+                    <TextBox x:Name="txtDoctors" Width="100" Height="30" Margin="5, -10, 5, 0"></TextBox>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="1" Grid.Column="0" Background="#EEEEEE" BorderBrush="#DDDDDD" BorderThickness="0,1,1,0">
+            <StackPanel Margin="0,10,0,0">
+                <Button x:Name="btnStatistics" Content="Statistics" Height="40" Margin="10,5" Click="BtnStatistics_Click" />
+                <Button x:Name="btnAnimation" Content="Animation" Height="40" Margin="10,5" Click="BtnAnimation_Click" />
+                <Separator></Separator>
+                <Button x:Name="btnStart" Content="Start" Height="40" Margin="10,5" Click="btnStart_Click" Background="LightGreen" />
+                <Button x:Name="btnPause" Content="Pause" Height="40" Margin="10,5" Click="btnPause_Click" Background="LightGoldenrodYellow" />
+                <Button x:Name="btnResume" Content="Resume" Height="40" Margin="10,5" Click="btnResume_Click" Background="LightBlue" />
+                <Button x:Name="btnStop" Content="Stop" Height="40" Margin="10,5" Click="btnStop_Click" Background="LightCoral" />
+                <Separator></Separator>
+                <!--<Button x:Name="btnCreateAnimator" Content="Create Animator" Height="40" Margin="10,5" Click="btnCreateAnimator_Click" Background="ForestGreen" />
+                <Button x:Name="btnDeleteAnimator" Content="Delete Animator" Height="40" Margin="10,5" Click="btnDeleteAnimator_Click" Background="Red" />-->
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            
+            <Grid x:Name="viewStatistics" Visibility="Visible" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Grid.Column="0" Margin="2">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Doctors" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <DataGrid x:Name="dgDoctors" AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows="False" MinHeight="200" MaxHeight="300" BorderThickness="1" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Grid.Column="1" Margin="2">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Nurses" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <DataGrid x:Name="dgNurses" AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows="False" MinHeight="200" MaxHeight="300" BorderThickness="1" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="0" Margin="2">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Ambulance A (Priority 1-2)" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <DataGrid x:Name="dgAmbulanceA" AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows="False" MinHeight="200" MaxHeight="300" BorderThickness="1" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.Column="1" Margin="2">
+                    <StackPanel Margin="5">
+                        <TextBlock Text="Ambulance B (Priority 5 &amp; Intake)" FontWeight="Bold" Margin="0,0,0,5"/>
+                        <DataGrid x:Name="dgAmbulanceB" AutoGenerateColumns="True" IsReadOnly="True" CanUserAddRows="False" MinHeight="200" MaxHeight="300" BorderThickness="1" />
+                    </StackPanel>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="1" Grid.Row="0" Grid.Column="2">
+                    <StackPanel >
+                        <TextBlock Text="Logs"></TextBlock>
+                        <ListBox x:Name="txtLogs" MinHeight="300" MaxHeight="300"></ListBox>
+                    </StackPanel>
+                </Border>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                    <TextBlock Text="Statistics"></TextBlock>
+                    <ListBox x:Name="txtStatistics" MinHeight="300" MaxHeight="300"></ListBox>
+                </StackPanel>
+
+            </Grid>
+
+            <Grid x:Name="viewAnimation" Visibility="Collapsed" Background="#F9F9F9">
+                <Border Name="animationCanvas" Background="#F9F9F9"/>
+                <TextBlock Text="Animation View Active" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#999999"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

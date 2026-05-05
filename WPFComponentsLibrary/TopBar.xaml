@@ -36,7 +36,7 @@
             <TextBlock Grid.Column="6" Height="20" Margin="0,-30,0,0" Text="Replication points" HorizontalAlignment="Center"></TextBlock>
             <TextBox x:Name="txtReplicationPoints" Grid.Column="6" Height="20" Width="70" HorizontalAlignment="Center" TextChanged="ReplicationPoints_TextChanged"></TextBox>
 
-            <TextBlock Grid.Column="7" Height="20" Margin="0,-30,0,0" Text="Time" HorizontalAlignment="Center"></TextBlock>
+            <TextBlock Grid.Column="7" Height="20" Margin="0,-30,0,0" Text="Time Mult." HorizontalAlignment="Center"></TextBlock>
             <ComboBox x:Name="cmbTime" Grid.Column="7" Width="70" Height="20">
 
             </ComboBox>

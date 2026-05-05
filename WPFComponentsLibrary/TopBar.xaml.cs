@@ -158,5 +158,12 @@ namespace WPFComponentsLibrary
         {
             ReplicationPoints = txtReplicationPoints.Text;
         }
+
+        public void DisableButtons()
+        {
+            btnStop.IsEnabled = false;
+            btnPause.IsEnabled = false;
+            btnResume.IsEnabled = false;
+        }
     }
 }

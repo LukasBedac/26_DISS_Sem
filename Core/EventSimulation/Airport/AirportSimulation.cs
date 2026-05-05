@@ -5,6 +5,7 @@ using Core.EventSimulation.Airport.Models;
 using Core.EventSimulation.Statistics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -332,6 +333,8 @@ namespace Core.EventSimulation.Airport
 
             ArrivalQueue1.Clear();
             ArrivalQueue2.Clear();
+            MetalDetectorQueue1.Clear();
+            MetalDetectorQueue2.Clear();
 
             AllCustomersNumber = 0;
             ArrivalQueueStat = new Statistic();

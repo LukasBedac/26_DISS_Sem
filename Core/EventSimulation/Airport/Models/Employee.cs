@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Airport.Models
 {
-    public class Employee : TimeEntity
+    public class Employee : Entity
     {
         public int ID { get; set; }
         public bool IsBusy { get; set; }

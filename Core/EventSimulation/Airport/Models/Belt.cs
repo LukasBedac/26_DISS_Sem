@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Airport.Models
 {
-    public class Belt : TimeEntity
+    public class Belt : Entity
     {
         private int _maxLuggage;
         public int ID { get; set; }

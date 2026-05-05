@@ -16,7 +16,7 @@ namespace Core.EventSimulation
         private List<SimDelegate> _delegates = new();
         public double CurrentTime { get; set; } = 0.0;
         public double EndTime { get; set; } = 86_400; //24 hours in seconds
-        public double WarmUpLength { get; set; } = 24 * 3600; //12 hours in seconds
+        public double WarmUpLength { get; set; } = 24 * 3600; //X hours in seconds
 
         public bool Paused { get; set; }
         public bool TurboMode { get; set; }

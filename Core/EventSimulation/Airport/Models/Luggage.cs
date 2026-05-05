@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.EventSimulation.Airport.Models
 {
-    public class Luggage : TimeEntity
+    public class Luggage : Entity
     {
         public int ID { get; set; }
         public Customer Customer { get; set; }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFComponentsLibrary", "WPF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportSimGUI", "AirportSimGUI\AirportSimGUI.csproj", "{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalSimGUI", "HospitalSimGUI\HospitalSimGUI.csproj", "{98DBCDC6-9423-47D7-95B5-31E82673AF22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F88919F5-08F1-4A53-87C8-AAE7BFEEB225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98DBCDC6-9423-47D7-95B5-31E82673AF22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98DBCDC6-9423-47D7-95B5-31E82673AF22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98DBCDC6-9423-47D7-95B5-31E82673AF22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98DBCDC6-9423-47D7-95B5-31E82673AF22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
