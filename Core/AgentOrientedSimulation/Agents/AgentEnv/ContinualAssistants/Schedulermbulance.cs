@@ -14,11 +14,10 @@ namespace Agents.AgentEnv.ContinualAssistants
 	public class Schedulermbulance : OSPABA.Scheduler
 	{
 		private Erlang _newArrival;
-        private int _arrivalsCounter = 0;
         public Schedulermbulance(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-            _newArrival = new Erlang(7, 0.836);
+            _newArrival = new Erlang(7, 1/ (0.836 * 60.0));
 			//_newArrival = new Erlang(2, 0.2 * 60);
 		}
 
@@ -26,7 +25,6 @@ namespace Agents.AgentEnv.ContinualAssistants
 		{
 			base.PrepareReplication();
             // Setup component for the next replication
-            _arrivalsCounter = 0;
 		}
 
 		//meta! sender="AgentEnv", id="7", type="Start"
@@ -42,14 +40,7 @@ namespace Agents.AgentEnv.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.PatientArrival:
-                    MessageForm newMessage = message.CreateCopy();
-                    Hold(_newArrival.NextDouble(), newMessage);
-
-                    Patient patient = CreatePatient();
-                    MyMessage myMessage = (MyMessage)message;
-                    myMessage.Patient = patient;
-                    myMessage.Addressee = MyAgent;
-                    Notice(myMessage);
+					AssistantFinished(message);
                     break;
 			}
 		}
@@ -76,11 +67,5 @@ namespace Agents.AgentEnv.ContinualAssistants
 				return (AgentEnv)base.MyAgent;
 			}
 		}
-
-        public Patient CreatePatient()
-        {
-			Patient patient = new Patient(MySim, 0, MySim.CurrentTime);
-			return patient;
-        }
     }
 }

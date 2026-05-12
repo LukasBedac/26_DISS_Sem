@@ -1,5 +1,7 @@
+using Core.AgentOrientedSimulation.Models;
 using OSPABA;
 using Simulation;
+using System.Windows.Interop;
 
 namespace Agents.AgentEnv
 {
@@ -33,18 +35,42 @@ namespace Agents.AgentEnv
 		//meta! sender="AgentHospital", id="20", type="Notice"
 		public void ProcessPatientDeparture(MessageForm message)
 		{
-            MyMessage myMessage = (MyMessage)message;
 
-			MyAgent.PatientTimeInSystem.AddValue(MySim.CurrentTime - myMessage.Patient.ArrivalTime);
+            MyMessage myMessage = (MyMessage)message;
+            double timeInSystem = MySim.CurrentTime - myMessage.Patient.ArrivalTime;
+            if (myMessage.Patient.CameByAmbulance)
+            {
+                MyAgent.ReplicationTimeInSystemAmbulance.AddValue(timeInSystem);
+            }
+            else
+            {
+                MyAgent.ReplicationTimeInSystemWalk.AddValue(timeInSystem);
+            }
+
+			if (!((MySimulation)MySim).IsTurboMode && myMessage.Patient.AnimItem != null)
+			{
+				MySim.Animator.Remove(myMessage.Patient.AnimItem);
+			}
+            myMessage.Patient.AnimItem = null;
         }
 
 		//meta! sender="SchedulerByFoot", id="9", type="Finish"
 		public void ProcessFinishSchedulerByFoot(MessageForm message)
 		{
-			message.Addressee = MyAgent.Parent;
-			Notice(message);
+            ((MySimulation)MySim).CheckWarmUp();
 
-			MyMessage newMessage = (MyMessage)message.CreateCopy();
+            MyMessage myMessage = (MyMessage)message;
+            MyAgent.TotalPatientsWalk++;
+
+            myMessage.Patient = CreatePatient(6);
+
+            MyMessage noticeMsg = (MyMessage)myMessage.CreateCopy();
+            noticeMsg.Code = Mc.PatientArrival;
+            noticeMsg.Addressee = MyAgent.Parent;
+			Notice(noticeMsg);
+
+			MyMessage newMessage = (MyMessage)myMessage.CreateCopy();
+			newMessage.Code = Mc.Start;
 			newMessage.Addressee = MyAgent.FindAssistant(SimId.SchedulerByFoot);
 			StartContinualAssistant(newMessage);
         }
@@ -52,10 +78,20 @@ namespace Agents.AgentEnv
 		//meta! sender="Schedulermbulance", id="7", type="Finish"
 		public void ProcessFinishSchedulermbulance(MessageForm message)
 		{
-            message.Addressee = MyAgent.Parent;
-            Notice(message);
+            ((MySimulation)MySim).CheckWarmUp();
 
-            MyMessage newMessage = (MyMessage)message.CreateCopy();
+			MyMessage myMessage = (MyMessage)message;
+            MyAgent.TotalPatientsAmbulance++;
+
+			myMessage.Patient = CreatePatient(0);
+
+            MyMessage noticeMsg = (MyMessage)myMessage.CreateCopy();
+            noticeMsg.Code = Mc.PatientArrival;
+            noticeMsg.Addressee = MyAgent.Parent;
+            Notice(noticeMsg);
+
+            MyMessage newMessage = (MyMessage)myMessage.CreateCopy();
+			newMessage.Code = Mc.Start;
             newMessage.Addressee = MyAgent.FindAssistant(SimId.Schedulermbulance);
             StartContinualAssistant(newMessage);
         }
@@ -63,14 +99,26 @@ namespace Agents.AgentEnv
 		//meta! userInfo="Process messages defined in code", id="0"
 		public void ProcessDefault(MessageForm message)
 		{
+			//MyMessage myMessage = (MyMessage)message;
+			//double timeInSystem = MySim.CurrentTime - myMessage.Patient.ArrivalTime;
 			switch (message.Code)
 			{
-				case Mc.PatientArrival:
-                    message.Addressee = MyAgent.Parent;
-                    Notice(message);
-					break;
-                default:
-					throw new Exception("Default method selected instead of schedulers");
+				//case Mc.PatientArrival:
+    //                if (myMessage.Patient.CameByAmbulance)
+    //                {
+    //                    MyAgent.ReplicationTimeInSystemAmbulance.AddValue(timeInSystem);
+    //                    MyAgent.TotalPatientsAmbulance++;
+    //                }
+    //                else
+    //                {
+    //                    MyAgent.ReplicationTimeInSystemWalk.AddValue(timeInSystem);
+    //                    MyAgent.TotalPatientsWalk++;
+    //                }
+    //                message.Addressee = MyAgent.Parent;
+    //                Notice(message);
+				//	break;
+    //            default:
+				//	throw new Exception("Default method selected instead of schedulers");
 					
             }
 		}
@@ -82,7 +130,7 @@ namespace Agents.AgentEnv
 
 		override public void ProcessMessage(MessageForm message)
 		{
-			switch (message.Code)
+            switch (message.Code)
 			{
 			case Mc.Finish:
 				switch (message.Sender.Id)
@@ -114,5 +162,10 @@ namespace Agents.AgentEnv
 				return (AgentEnv)base.MyAgent;
 			}
 		}
-	}
+        public Patient CreatePatient(int priority)
+        {
+            Patient patient = new Patient(MySim, priority, MySim.CurrentTime);
+            return patient;
+        }
+    }
 }

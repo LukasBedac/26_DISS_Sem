@@ -35,30 +35,30 @@ namespace Agents.AgentTransfers.ContinualAssistants
 		//meta! sender="AgentTransfers", id="58", type="Start"
 		public void ProcessStart(MessageForm message)
 		{
-			MyMessage myMessage = (MyMessage)message;
+            ((MySimulation)MySim).CheckWarmUp();
+            MyMessage myMessage = (MyMessage)message;
 			Patient patient = myMessage.Patient;
 			double transferTime = 0;
 			double maxTransferTime = 0;
 
             if (patient.Status == PatientStatus.Arrived)
 			{
-				if (patient.Priority == 0)
+				if (patient.CameByAmbulance)
 				{
 					transferTime = _pBABeforeInitExamTransferGenerator.NextDouble(); 
-				} else if (patient.Priority == 6)
+				} else 
 				{
 					transferTime = _pOFBeforeInitExamTransferGenerator.NextDouble();
                 }
                 
 				CreatePatientPath(myMessage, transferTime);
 
-				patient.Status = PatientStatus.WaitingForInitialExamination;
 				if (transferTime > maxTransferTime) maxTransferTime = transferTime;
                 
             }  
             else if (patient.Status == PatientStatus.WaitingForInitialExamination)
             {
-                transferTime = _ambulanceTransferGenerator.NextDouble();
+                transferTime = 0;//_ambulanceTransferGenerator.NextDouble();
                 CreatePatientPath(myMessage, transferTime);
                 if (transferTime > maxTransferTime) maxTransferTime = transferTime;
             }
@@ -81,24 +81,26 @@ namespace Agents.AgentTransfers.ContinualAssistants
 
             if (myMessage.Nurse != null)
 			{
-				double nurseTransferTime = _ambulanceTransferGenerator.NextDouble();
+				double nurseTransferTime = myMessage.Nurse.AtEntrance ? 0 : _ambulanceTransferGenerator.NextDouble();
 
 				CreateResourcePath(myMessage, nurseTransferTime, myMessage.Nurse);
 				if (nurseTransferTime > maxTransferTime) maxTransferTime = nurseTransferTime;
             }
 			if (myMessage.Doctor != null)
 			{
-				double doctorTransferTime = _ambulanceTransferGenerator.NextDouble();
+				double doctorTransferTime = myMessage.Doctor.AtEntrance ? 0 : _ambulanceTransferGenerator.NextDouble();
 
                 CreateResourcePath(myMessage, doctorTransferTime, null,  myMessage.Doctor);
 				if (doctorTransferTime > maxTransferTime) maxTransferTime = doctorTransferTime;
             }
+            message.Code = Mc.Finish;
             Hold(maxTransferTime, message);
         }
 
         private void CreateResourcePath(MyMessage myMessage, double transferTime, Nurse? nurse = null, Doctor? doctor = null)
         {
-			//PointF[] path = null;
+            if (((MySimulation)MySim).IsTurboMode) return;
+            //PointF[] path = null;
 
             PointF targetAmbulancePos = new PointF(370, 170);
             if (myMessage.AmbulanceA != null)
@@ -120,13 +122,15 @@ namespace Agents.AgentTransfers.ContinualAssistants
                 {
                     path.Add(new PointF(370, currentPos.Y));
                     path.Add(new PointF(370, 170));
+                    path.Add(new PointF(targetAmbulancePos.X, 170));
                 }
                 else
                 {
                     path.Add(new PointF(currentPos.X, 170));
+                    path.Add(new PointF(targetAmbulancePos.X, 170));
                 }
 
-                path.Add(targetAmbulancePos);
+                path.Add(new PointF(targetAmbulancePos.X, targetAmbulancePos.Y - 20));
 
                 nurse.AnimTransfer(MySim.CurrentTime, transferTime, path.ToArray());
                 nurse.AtEntrance = false;
@@ -141,13 +145,15 @@ namespace Agents.AgentTransfers.ContinualAssistants
                 {
                     path.Add(new PointF(370, currentPos.Y));
                     path.Add(new PointF(370, 170));
+                    path.Add(new PointF(targetAmbulancePos.X, 170));
                 }
                 else
                 {
                     path.Add(new PointF(currentPos.X, 170));
+                    path.Add(new PointF(targetAmbulancePos.X, 170));
                 }
-
-                path.Add(targetAmbulancePos);
+                
+                path.Add(new PointF(targetAmbulancePos.X - 20, targetAmbulancePos.Y - 20));
 
                 doctor.AnimTransfer(MySim.CurrentTime, transferTime, path.ToArray());
                 doctor.AtEntrance = false;
@@ -156,7 +162,8 @@ namespace Agents.AgentTransfers.ContinualAssistants
 
         private void CreatePatientPath(MyMessage myMessage, double transferTime)
 		{
-			Patient patient = myMessage.Patient;
+            if (((MySimulation)MySim).IsTurboMode) return;
+            Patient patient = myMessage.Patient;
 
 			PointF[] transferPath = null;
 
@@ -179,21 +186,12 @@ namespace Agents.AgentTransfers.ContinualAssistants
 
         private PointF[] PatientLeavingPath(Patient patient)
         {
-            PointF[] transferPath = new PointF[]
-            {
-                new PointF(patient.AnimItem.GetPosition(MySim.CurrentTime).X, 170),
-                new PointF(800, 170)
-            };
-            if (patient.AmbulanceA != null)
-            {
-                transferPath.Append(new PointF(patient.AmbulanceA.CenterPosition.X, patient.AmbulanceA.CenterPosition.Y));
-            }
-            else if (patient.AmbulanceB != null)
-            {
-                transferPath.Append(new PointF(patient.AmbulanceB.CenterPosition.X, patient.AmbulanceB.CenterPosition.Y));
-            }
+            List<PointF> transferPath = new List<PointF>();
+            transferPath.Add(new PointF(patient.AnimItem.GetPosition(MySim.CurrentTime).X, 170));
+            transferPath.Add(new PointF(800, 170));
+            transferPath.Add(new PointF(800, 50));
 
-            return transferPath;
+            return transferPath.ToArray();
         }
 
         private PointF[] PatientBetweenAmbulancesPath(MyMessage myMessage)
@@ -204,15 +202,16 @@ namespace Agents.AgentTransfers.ContinualAssistants
             PointF currentPos = patient.AnimItem.GetPosition(MySim.CurrentTime);
             transferPath.Add(currentPos);
 
-            transferPath.Add(new PointF(300, currentPos.Y));
-            transferPath.Add(new PointF(300, 170));
+            transferPath.Add(new PointF(currentPos.X, 170));
 
             if (myMessage.AmbulanceA != null)
             {
+                transferPath.Add(new PointF(myMessage.AmbulanceA.CenterPosition.X, 170));
                 transferPath.Add(myMessage.AmbulanceA.CenterPosition);
             }
             else if (myMessage.AmbulanceB != null)
             {
+                transferPath.Add(new PointF(myMessage.AmbulanceB.CenterPosition.X, 170));
                 transferPath.Add(myMessage.AmbulanceB.CenterPosition);
             }
 
@@ -247,8 +246,10 @@ namespace Agents.AgentTransfers.ContinualAssistants
 		{
 			switch (message.Code)
 			{
-                
-			}
+                case Mc.Finish:
+                    AssistantFinished(message);
+                    break;
+            }
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

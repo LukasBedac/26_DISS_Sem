@@ -27,13 +27,15 @@ namespace Agents.AgentDoctor
 		public void ProcessFreeDoctor(MessageForm message)
 		{
             MyMessage msg = (MyMessage)message;
-            MyAgent.FreeDoctors.Add(msg.Doctor);
+			MyAgent.RecordDoctorStat();
+            MyAgent.Doctors.Add(msg.Doctor);
 
             if (MyAgent.Queue.Count > 0)
             {
+                MyAgent.RecordDoctorStat();
                 MyMessage nextMsg = MyAgent.Queue.Dequeue();
-                nextMsg.Doctor = MyAgent.FreeDoctors[0];
-                MyAgent.FreeDoctors.RemoveAt(0);
+                nextMsg.Doctor = MyAgent.Doctors[0];
+                MyAgent.Doctors.RemoveAt(0);
                 Response(nextMsg);
             }
         }
@@ -42,10 +44,11 @@ namespace Agents.AgentDoctor
 		public void ProcessRequestDoctorAllocation(MessageForm message)
 		{
             MyMessage msg = (MyMessage)message;
-            if (MyAgent.FreeDoctors.Count > 0)
+            if (MyAgent.Doctors.Count > 0)
             {
-                msg.Doctor = MyAgent.FreeDoctors[0];
-                MyAgent.FreeDoctors.RemoveAt(0);
+				MyAgent.RecordDoctorStat();
+                msg.Doctor = MyAgent.Doctors[0];
+                MyAgent.Doctors.RemoveAt(0);
                 Response(msg);
             }
             else MyAgent.Queue.Enqueue(msg, (msg.Patient.Priority, msg.Patient.ArrivalTime));

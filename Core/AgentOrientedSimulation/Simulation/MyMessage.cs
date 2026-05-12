@@ -10,7 +10,8 @@ namespace Simulation
         public Doctor Doctor { get; set; }
         public AmbulanceA AmbulanceA { get; set; }
 		public AmbulanceB AmbulanceB { get; set; }
-
+        public bool IsFreeAmbulanceA { get; set; }
+        public bool IsFreeAmbulanceB { get; set; }
         public MyMessage(OSPABA.Simulation mySim) :
 			base(mySim)
 		{
@@ -38,6 +39,6 @@ namespace Simulation
 			Doctor = original.Doctor;
 			AmbulanceA = original.AmbulanceA;
 			AmbulanceB = original.AmbulanceB;
-		}
+        }
 	}
 }

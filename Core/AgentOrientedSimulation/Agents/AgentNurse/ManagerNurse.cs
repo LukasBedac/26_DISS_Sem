@@ -28,10 +28,11 @@ namespace Agents.AgentNurse
 		public void ProcessRequestNurseAllocation(MessageForm message)
 		{
             MyMessage msg = (MyMessage)message;
-            if (MyAgent.FreeNurses.Count > 0)
+            if (MyAgent.Nurses.Count > 0)
             {
-                msg.Nurse = MyAgent.FreeNurses[0];
-                MyAgent.FreeNurses.RemoveAt(0);
+				MyAgent.RecordNurseStat();
+                msg.Nurse = MyAgent.Nurses[0];
+                MyAgent.Nurses.RemoveAt(0);
                 Response(msg);
             }
             else MyAgent.Queue.Enqueue(msg, (msg.Patient.Priority, msg.Patient.ArrivalTime));
@@ -42,13 +43,15 @@ namespace Agents.AgentNurse
 		public void ProcessFreeNurse(MessageForm message)
 		{
             MyMessage msg = (MyMessage)message;
-            MyAgent.FreeNurses.Add(msg.Nurse);
+            MyAgent.RecordNurseStat();
+            MyAgent.Nurses.Add(msg.Nurse);
 
             if (MyAgent.Queue.Count > 0)
             {
+                MyAgent.RecordNurseStat();
                 MyMessage nextMsg = MyAgent.Queue.Dequeue();
-                nextMsg.Nurse = MyAgent.FreeNurses[0];
-                MyAgent.FreeNurses.RemoveAt(0);
+                nextMsg.Nurse = MyAgent.Nurses[0];
+                MyAgent.Nurses.RemoveAt(0);
                 Response(nextMsg);
             }
         }

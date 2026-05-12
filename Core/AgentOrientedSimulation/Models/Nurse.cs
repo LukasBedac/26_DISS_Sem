@@ -4,6 +4,7 @@ using OSPAnimator;
 using Simulation;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,12 +33,18 @@ namespace Core.AgentOrientedSimulation.Models
             {
                 AnimShape = AnimShape.STAR,
                 Color = Colors.Green,
-                Size = 15
+                Size = 15,
+                ZIndex = 2
             };
 
             AnimItem.SetPosition(100 + ((ID - 1) * 20), 170);
             AnimItem.Visible = true;
-            _sim.Animator.Register(AnimItem);
+            if (_sim.AnimatorExists) _sim.Animator.Register(AnimItem);
+        }
+
+        public override void AnimTransfer(double currentTime, double duration, PointF[] path)
+        {
+            AnimItem.StartAnim(currentTime, duration, path);
         }
     }
 }

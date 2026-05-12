@@ -41,14 +41,15 @@ namespace Agents.AgentExaminations.ContinualAssistants
 
             if (patient.Priority == 6)
             {
-                examinationTime = _initialExaminationWalkTimeGenerator.NextDouble();
+                examinationTime = _initialExaminationWalkTimeGenerator.NextDouble() * 60;
                 patient.Priority = DecidePriorioty(false);
             }
             else
             {
-                examinationTime = _initialExaminationAmbulanceGenerator.NextInt();
+                examinationTime = _initialExaminationAmbulanceGenerator.NextInt() * 60;
                 patient.Priority = DecidePriorioty(true);
             }
+			myMessage.Code = Mc.Finish;
             Hold(examinationTime, myMessage);
         }
 
@@ -78,7 +79,10 @@ namespace Agents.AgentExaminations.ContinualAssistants
 		{
 			switch (message.Code)
 			{
-			}
+				case Mc.Finish:
+					AssistantFinished(message);
+					break;
+            }
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

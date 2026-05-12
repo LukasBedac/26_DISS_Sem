@@ -17,6 +17,7 @@ namespace WPFComponentsLibrary.DropDowns
         x10,
         x25,
         x50,
-        x100
+        x100,
+        x1000
     }
 }

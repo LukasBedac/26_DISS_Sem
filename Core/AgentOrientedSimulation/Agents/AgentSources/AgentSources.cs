@@ -6,7 +6,8 @@ namespace Agents.AgentSources
 	//meta! id="65"
 	public class AgentSources : OSPABA.Agent
 	{
-		public AgentSources(int id, OSPABA.Simulation mySim, Agent parent) :
+		
+        public AgentSources(int id, OSPABA.Simulation mySim, Agent parent) :
 			base(id, mySim, parent)
 		{
 			Init();
@@ -16,7 +17,7 @@ namespace Agents.AgentSources
 		{
 			base.PrepareReplication();
 			// Setup component for the next replication
-		}
+        }
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"
 		private void Init()

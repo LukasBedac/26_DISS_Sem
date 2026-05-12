@@ -116,5 +116,19 @@ namespace TestConsole.Distributiontest
                 writer.Close();
             }
         }
+
+        public void GenerateErlang()
+        {
+            string path = "Erlang.txt";
+            Erlang erlang = new Erlang(7, 0.836);
+            using (StreamWriter writer = new StreamWriter(path, append: false))
+            {
+                for (int i = 0; i < NumberOfGenerations; i++)
+                {
+                    writer.WriteLine(erlang.NextDouble());
+                }
+                writer.Close();
+            }
+        }
     }
 }

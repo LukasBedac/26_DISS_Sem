@@ -18,7 +18,7 @@ namespace Core.AgentOrientedSimulation.Models.Stats
         public Queue<T> Queue { get; set; }
         public double AverageQueueLength => _weightedStatistic.Mean;
         public double ReplicationMean => _statistic.Mean;
-        public (double, double) ConfidenceInterval90 => _statistic.ConfidenceInterval90();
+        public (double, double) ConfidenceInterval95 => _statistic.ConfidenceInterval95();
         public StatQueue(OSPABA.Simulation core, int maxCapacity = 0)
         {
             _core = core;
@@ -49,7 +49,7 @@ namespace Core.AgentOrientedSimulation.Models.Stats
         {
             //Queue.Clear();
             _weightedStatistic.ClearValues();
-            _lastChangeInQueue = 0.0;
+            _lastChangeInQueue = _core.CurrentTime;
         }
         private void UpdateStatistics()
         {

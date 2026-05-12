@@ -16,11 +16,10 @@ namespace Agents.AgentEnv.ContinualAssistants
 	public class SchedulerByFoot : OSPABA.Scheduler
 	{
 		private Exponential _newArrival;
-		private int _arrivalsCounter = 0;
         public SchedulerByFoot(int id, OSPABA.Simulation mySim, CommonAgent myAgent) :
 			base(id, mySim, myAgent)
 		{
-            _newArrival = new Exponential(9.57 / 60);
+            _newArrival = new Exponential(1 /(9.57 * 60.0));
             //_newArrival = new Exponential(2 * 60);
         } 
 
@@ -28,7 +27,6 @@ namespace Agents.AgentEnv.ContinualAssistants
 		{
 			base.PrepareReplication();
 			// Setup component for the next replication
-			_arrivalsCounter = 0;
         }
 
 		//meta! sender="AgentEnv", id="9", type="Start"
@@ -44,14 +42,7 @@ namespace Agents.AgentEnv.ContinualAssistants
 			switch (message.Code)
 			{
 				case Mc.PatientArrival:
-					MessageForm newMessage = message.CreateCopy();
-					Hold(_newArrival.NextDouble(), newMessage);
-
-                    Patient patient =  CreatePatient();
-					MyMessage myMessage = (MyMessage)message;
-					myMessage.Patient = patient;
-					myMessage.Addressee = MyAgent;
-					Notice(myMessage);
+					AssistantFinished(message);
                     break;
 			}
 		}
@@ -78,10 +69,5 @@ namespace Agents.AgentEnv.ContinualAssistants
 				return (AgentEnv)base.MyAgent;
 			}
 		}
-		public Patient CreatePatient()
-		{
-			Patient patient = new Patient(MySim, 6, MySim.CurrentTime);
-			return patient;
-        }
 	}
 }

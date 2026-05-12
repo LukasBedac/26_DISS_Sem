@@ -19,17 +19,21 @@ namespace Core.AgentOrientedSimulation.Models
     {
         public int ID { get; set; }
         public int Priority { get; set; }
+        public bool CameByAmbulance { get; set; }
         public PatientStatus Status { get; set; }
         public AmbulanceA? AmbulanceA { get; set; } = null;
         public AmbulanceB? AmbulanceB { get; set; } = null;
         public AnimItem AnimItem { get; set; }
-
+        public double StartTimeFromEntranceToExam { get; set; }
+        public double EndTimeFromEntranceToExam { get; set; } = 0.0;
         public Patient(OSPABA.Simulation sim, int priority, double arrivalTime)
         {
             _sim = (MySimulation)sim;
             ID = IDs.GetPatientID();
             Priority = priority;
             ArrivalTime = arrivalTime;
+            StartTimeFromEntranceToExam = arrivalTime;
+            CameByAmbulance = (priority == 0);
             InitializeEntity();
         }
 
@@ -40,11 +44,12 @@ namespace Core.AgentOrientedSimulation.Models
             {
                 AnimShape = AnimShape.CIRCLE,
                 Color = Priority == 0 ? Colors.Red : Colors.Green,
-                Size = 15
+                Size = 15,
+                ZIndex = 2
             };
 
             AnimItem.SetPosition(0, 0);
-            _sim.Animator.Register(AnimItem);
+            if (_sim.AnimatorExists) _sim.Animator.Register(AnimItem);
         }
             
         public override void AnimTransfer(double currentTime, double duration, PointF[] path)

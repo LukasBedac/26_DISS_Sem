@@ -44,7 +44,8 @@ namespace WPFComponentsLibrary
             { Time.x10, 10.0 },
             { Time.x25, 25.0 },
             { Time.x50, 50.0 },
-            { Time.x100, 100.0 }
+            { Time.x100, 100.0 },
+            { Time.x1000, 1000.0 }
         };
 
         public TopBar()
@@ -95,7 +96,7 @@ namespace WPFComponentsLibrary
 
             cmbReplications.SelectionChanged += CmbReplications_SelectionChanged;
 
-            int defaultIndex = Array.IndexOf(Enum.GetValues(typeof(Replications)), DropDowns.Replications.Thousand);
+            int defaultIndex = Array.IndexOf(Enum.GetValues(typeof(Replications)), DropDowns.Replications.Hundred);
             if (defaultIndex >= 0 && defaultIndex < cmbReplications.Items.Count)
             {
                 cmbReplications.SelectedIndex = defaultIndex;

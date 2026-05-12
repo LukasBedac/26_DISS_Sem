@@ -11,7 +11,7 @@ namespace Core.EventSimulation.Statistics
         private double _sumWeightedValues;
         private double _sumWeights;
 
-        public double Mean => _sumWeightedValues / _sumWeights;
+        public double Mean => _sumWeights == 0 ? 0.0 : _sumWeightedValues / _sumWeights;
 
         public void AddValue(double value, double weight)
         {

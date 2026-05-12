@@ -42,7 +42,7 @@
                     <TextBlock x:Name="txtTime" Width="100" Height="30" Margin="5, -10, 5, 0"></TextBlock>
                 </StackPanel>
 
-                <CheckBox Grid.Column="1" Grid.Row="0" Height="30" Content="Turbo Mode" VerticalAlignment="Center" Margin="5, 25, 5, 0"></CheckBox>
+                <CheckBox x:Name="checkTurboMode" Grid.Column="1" Grid.Row="0" Height="30" Content="Turbo Mode" VerticalAlignment="Center" Margin="5, 25, 5, 0"></CheckBox>
 
                 <StackPanel Grid.Column="2" Grid.Row="0">
                     <TextBlock Width="100" Height="30" Text="Number of nurses: " Margin="5, 5, 5, 0"></TextBlock>
@@ -66,8 +66,13 @@
                 <Button x:Name="btnResume" Content="Resume" Height="40" Margin="10,5" Click="btnResume_Click" Background="LightBlue" />
                 <Button x:Name="btnStop" Content="Stop" Height="40" Margin="10,5" Click="btnStop_Click" Background="LightCoral" />
                 <Separator></Separator>
-                <!--<Button x:Name="btnCreateAnimator" Content="Create Animator" Height="40" Margin="10,5" Click="btnCreateAnimator_Click" Background="ForestGreen" />
-                <Button x:Name="btnDeleteAnimator" Content="Delete Animator" Height="40" Margin="10,5" Click="btnDeleteAnimator_Click" Background="Red" />-->
+                <TextBlock Text="Sim. time (def 28 days)" HorizontalAlignment="Center"></TextBlock>
+                <TextBox x:Name="txtSimTime" Width="130" Height="25" Text="2419200" HorizontalAlignment="Center"></TextBox>
+                <TextBlock Text="Warmup Time (def 20 days)" HorizontalAlignment="Center"></TextBlock>
+                <TextBox x:Name="txtWarmUpTime" Width="130" Height="25" Text="1728000" HorizontalAlignment="Center"></TextBox>
+                <Button x:Name="btnVariant1" Content="Testing variant" Height="40" Margin="10,5" Click="btnVariant1_Click" />
+                <Button x:Name="btnVariant2" Content="Varaint 2" Height="40" Margin="10,5" Click="btnVariant2_Click"/>
+                <Button x:Name="btnVariant3" Content="Variant 3" Height="40" Margin="10,5" Click="btnVariant3_Click"/>
             </StackPanel>
         </Border>
 
@@ -116,11 +121,19 @@
                     <StackPanel >
                         <TextBlock Text="Logs"></TextBlock>
                         <ListBox x:Name="txtLogs" MinHeight="300" MaxHeight="300"></ListBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Actual Replication: " Grid.Column="0"></TextBlock>
+                            <TextBlock x:Name="txtActualReplication" Grid.Column="1"></TextBlock>
+                        </Grid>
                     </StackPanel>
                 </Border>
                             <StackPanel Grid.Row="1" Grid.Column="2">
                     <TextBlock Text="Statistics"></TextBlock>
-                    <ListBox x:Name="txtStatistics" MinHeight="300" MaxHeight="300"></ListBox>
+                    <ListBox x:Name="txtStatistics" MinHeight="400" MaxHeight="400"></ListBox>
                 </StackPanel>
 
             </Grid>

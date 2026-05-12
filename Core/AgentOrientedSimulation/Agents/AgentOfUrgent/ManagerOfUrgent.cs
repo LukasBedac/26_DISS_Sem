@@ -2,6 +2,7 @@ using Core.AgentOrientedSimulation.Models;
 using Core.AgentOrientedSimulation.Models.Enums;
 using OSPABA;
 using Simulation;
+using System.Drawing;
 using System.Net.Cache;
 
 namespace Agents.AgentOfUrgent
@@ -29,131 +30,170 @@ namespace Agents.AgentOfUrgent
 		//meta! sender="AgentSources", id="79", type="Response"
 		public void ProcessRequestResource(MessageForm message)
 		{
+            ((MySimulation)MySim).CheckWarmUp();
+
             MyMessage myMessage = (MyMessage)message;
 			Patient patient = myMessage.Patient;
             if (patient.Status == PatientStatus.WaitingForInitialExamination)
 			{
-				patient.Status = PatientStatus.InitialExamination;
-			} 
+                MyAgent.AmbulancesInitialPatientQueue.Dequeue();
+				if (patient.CameByAmbulance)
+				{
+					MyAgent.PatientAmbulanceInitExamQueueStat.Dequeue();
+
+				} else
+				{
+					MyAgent.PatientWalkInInitExamQueueStat.Dequeue();
+				}
+				patient.EndWaitTime = MySim.CurrentTime;
+				if (patient.CameByAmbulance)
+				{
+					MyAgent.InitialExamWaitAmbulanceStat.AddValue(patient.EndWaitTime - patient.StartWaitTime);
+				} else
+				{
+					MyAgent.InitialExamWaitWalkInStat.AddValue(patient.EndWaitTime - patient.StartWaitTime);
+				}
+            } 
 			else if (patient.Status == PatientStatus.WaitingForExamination)
 			{
-				patient.Status = PatientStatus.Examination;
+                MyAgent.AmbulancesExamPatientQueue.Dequeue();
+				if (patient.CameByAmbulance)
+				{
+					MyAgent.PatientAmbulanceExaminationQueueStat.Dequeue();
+				} else
+				{
+					MyAgent.PatientWalkInExaminationQueueStat.Dequeue();
+				}
+				patient.EndTimeFromEntranceToExam = MySim.CurrentTime;
+				if (patient.CameByAmbulance)
+				{
+					MyAgent.ExaminationWaitAmbulanceStat.AddValue(patient.EndTimeFromEntranceToExam - patient.StartTimeFromEntranceToExam);
+                } else
+				{
+					MyAgent.ExaminationWaitWalkInStat.AddValue(patient.EndTimeFromEntranceToExam - patient.StartTimeFromEntranceToExam);
+				}
             }
 
-            MyAgent.AmbulancesInitialPatientQueue.Dequeue();
-            MyAgent.AmbulancesInitialStatistic.Dequeue();
-
             //Transfer for patient, nurse and doctor
-            MyMessage groupTransfer = new MyMessage(MySim)
-			{
-                Code = Mc.Transfer,
-                Addressee = MySim.FindAgent(SimId.AgentTransfers),
-				Patient = patient,
-				Nurse = myMessage.Nurse,
-				Doctor = myMessage.Doctor,
-				AmbulanceA = myMessage.AmbulanceA,
-				AmbulanceB = myMessage.AmbulanceB
-            };
-
+            MyMessage groupTransfer = (MyMessage)message.CreateCopy();
+			groupTransfer.Code = Mc.Transfer;
+			groupTransfer.Addressee = MySim.FindAgent(SimId.AgentTransfers);
+			groupTransfer.Patient = patient;
+			groupTransfer.Nurse = myMessage.Nurse;
+			groupTransfer.Doctor = myMessage.Doctor;
+			groupTransfer.AmbulanceA = myMessage.AmbulanceA;
+			groupTransfer.AmbulanceB = myMessage.AmbulanceB;
             Request(groupTransfer);
         }
 
 		//meta! sender="AgentExaminations", id="60", type="Response"
 		public void ProcessInitalExamination(MessageForm message)
 		{
+            ((MySimulation)MySim).CheckWarmUp();
+
             MyMessage mymessage = (MyMessage)message;
             Patient patient = mymessage.Patient;
 
-            MyMessage freeNurse = new MyMessage(MySim) 
-			{ 
-				Code = Mc.FreeNurse,
-				Addressee = MySim.FindAgent(SimId.AgentSources),
-                Nurse = mymessage.Nurse 
-			};
+            MyMessage freeNurse = (MyMessage)message.CreateCopy();
+			freeNurse.Code = Mc.FreeNurse;
+			freeNurse.Addressee = MySim.FindAgent(SimId.AgentSources);
+			freeNurse.Nurse = mymessage.Nurse;
             Notice(freeNurse);
 
-            MyMessage freeAmb = new MyMessage(MySim) 
-			{ 
-				Code = Mc.FreeAmbulance, 
-				Addressee = MySim.FindAgent(SimId.AgentSources),
-                AmbulanceB = mymessage.AmbulanceB 
-			};
+            MyMessage freeAmb = (MyMessage)message.CreateCopy();
+			freeAmb.Code = Mc.FreeAmbulance;
+			freeAmb.Addressee = MySim.FindAgent(SimId.AgentSources);
+			freeAmb.AmbulanceB = mymessage.AmbulanceB;
             Notice(freeAmb);
 
             mymessage.Nurse = null;
             mymessage.AmbulanceB = null;
 
+			if (patient.CameByAmbulance)
+			{
+				patient.AnimItem.MoveTo(MySim.CurrentTime, 1 ,new PointF(100, 350));
+			} else
+			{
+                patient.AnimItem.MoveTo(MySim.CurrentTime, 1 ,new PointF(100, 300));
+            }
             patient.Status = PatientStatus.WaitingForExamination;
 
-            MyAgent.AmbulancesExamPatientQueue.Enqueue(patient, (patient.Priority, patient.ArrivalTime));
-            MyAgent.AmbulancesExamStatistic.Enqueue(patient);
+			patient.StartWaitTime = MySim.CurrentTime;
 
-            MyMessage resourceMessage = new MyMessage(MySim) 
-			{ 
-				Code = Mc.RequestResource, 
-				Addressee = MySim.FindAgent(SimId.AgentSources),
-                Patient = patient 
-			};
+            MyAgent.AmbulancesExamPatientQueue.Enqueue(patient, (patient.Priority, patient.ArrivalTime));
+            if (patient.CameByAmbulance)
+			{
+				MyAgent.PatientAmbulanceExaminationQueueStat.Enqueue(patient);
+			} else
+			{
+				MyAgent.PatientWalkInExaminationQueueStat.Enqueue(patient);
+            }
+
+			MyMessage resourceMessage = (MyMessage)message.CreateCopy();
+			resourceMessage.Code = Mc.RequestResource;
+			resourceMessage.Addressee = MySim.FindAgent(SimId.AgentSources);
+			resourceMessage.Patient = patient;
             Request(resourceMessage);
         }
 
 		//meta! sender="AgentTransfers", id="59", type="Response"
 		public void ProcessTransfer(MessageForm message)
 		{
+            ((MySimulation)MySim).CheckWarmUp();
+
             MyMessage myMessage = (MyMessage)message;
             Patient patient = myMessage.Patient;
 
 			if (patient.Status == PatientStatus.Arrived)
 			{
+				patient.StartWaitTime = MySim.CurrentTime;
+
                 MyAgent.AmbulancesInitialPatientQueue.Enqueue(patient, (patient.Priority, patient.ArrivalTime));
-                MyAgent.AmbulancesInitialStatistic.Enqueue(patient);
+                if (patient.CameByAmbulance)
+				{
+					MyAgent.PatientAmbulanceInitExamQueueStat.Enqueue(patient);
+                } else
+				{
+					MyAgent.PatientWalkInInitExamQueueStat.Enqueue(patient);
+                }
 
 				patient.Status = PatientStatus.WaitingForInitialExamination;
 
-                MyMessage resourcesMessage = new MyMessage(MySim)
-                {
-                    Code = Mc.RequestResource,
-                    Addressee = MySim.FindAgent(SimId.AgentSources),
-                    Patient = patient
-                };
+                MyMessage resourcesMessage = (MyMessage)message.CreateCopy();
+                resourcesMessage.Code = Mc.RequestResource;
+                resourcesMessage.Addressee = MySim.FindAgent(SimId.AgentSources);
+                resourcesMessage.Patient = patient;
                 Request(resourcesMessage);
             }
 			else if (patient.Status == PatientStatus.WaitingForInitialExamination)
 			{
 				patient.Status = PatientStatus.InitialExamination;
 
-                MyMessage initExamMessage = new MyMessage(MySim)
-                {
-                    Code = Mc.InitalExamination,
-                    Addressee = MySim.FindAgent(SimId.AgentExaminations),
-                    Patient = patient,
-					AmbulanceB = myMessage.AmbulanceB,
-					Nurse = myMessage.Nurse
-                };
+                MyMessage initExamMessage = (MyMessage)message.CreateCopy();
+                initExamMessage.Code = Mc.InitalExamination;
+                initExamMessage.Addressee = MySim.FindAgent(SimId.AgentExaminations);
+                initExamMessage.Patient = patient;
+                initExamMessage.AmbulanceB = myMessage.AmbulanceB;
+                initExamMessage.Nurse = myMessage.Nurse;
                 Request(initExamMessage);
             }
 			else if (patient.Status == PatientStatus.WaitingForExamination)
 			{
 				patient.Status = PatientStatus.Examination;
 
-                MyMessage examMessage = new MyMessage(MySim)
-                {
-                    Code = Mc.InitalExamination,
-                    Addressee = MySim.FindAgent(SimId.AgentExaminations),
-                    Patient = patient,
-                    AmbulanceA = myMessage.AmbulanceA,
-                    Nurse = myMessage.Nurse,
-					Doctor = myMessage.Doctor
-                };
+                MyMessage examMessage = (MyMessage)message.CreateCopy();
+                examMessage.Code = Mc.Examination;
+                examMessage.Addressee = MySim.FindAgent(SimId.AgentExaminations);
+                examMessage.Patient = patient;
+                examMessage.Nurse = myMessage.Nurse;
                 Request(examMessage);
-            } else if (patient.Status == PatientStatus.Leaving)
+            } 
+			else if (patient.Status == PatientStatus.Leaving)
 			{
-				MyMessage responseMessage = new MyMessage(MySim)
-				{
-					Code = Mc.PatientExamination,
-					Addressee = MyAgent.Parent,
-					Patient = patient
-				};
+				MyMessage responseMessage = (MyMessage)message.CreateCopy();
+				responseMessage.Code = Mc.PatientExamination;
+				responseMessage.Addressee = MyAgent.Parent;
+				responseMessage.Patient = patient;
 				Response(responseMessage);
             }
         }
@@ -167,46 +207,53 @@ namespace Agents.AgentOfUrgent
 
 
             //Request transfer for patient
-            MyMessage transferMessage = new MyMessage(MySim)
-            {
-                Code = Mc.Transfer,
-                Addressee = MySim.FindAgent(SimId.AgentTransfers),
-                Patient = patient
-            };
+            MyMessage transferMessage = (MyMessage)myMessage.CreateCopy();
+            transferMessage.Code = Mc.Transfer;
+            transferMessage.Addressee = MySim.FindAgent(SimId.AgentTransfers);
+            transferMessage.Patient = patient;
 			Request(transferMessage);
 		}
 
 		//meta! sender="AgentExaminations", id="61", type="Response"
 		public void ProcessExamination(MessageForm message)
 		{
+            ((MySimulation)MySim).CheckWarmUp();
+
             MyMessage mymessage = (MyMessage)message;
             Patient patient = mymessage.Patient;
 
-            MyMessage freeNurse = new MyMessage(MySim)
-            {
-                Code = Mc.FreeNurse,
-                Addressee = MySim.FindAgent(SimId.AgentSources),
-                Nurse = mymessage.Nurse
-            };
+			patient.EndTimeFromEntranceToExam = MySim.CurrentTime;
+
+            MyMessage freeNurse = (MyMessage)message.CreateCopy();
+            freeNurse.Code = Mc.FreeNurse;
+			freeNurse.Addressee = MySim.FindAgent(SimId.AgentSources);
+			freeNurse.Nurse = mymessage.Nurse;
             Notice(freeNurse);
 
-			MyMessage freeDoctor = new MyMessage(MySim)
-			{
-				Code = Mc.FreeDoctor,
-                Addressee = MySim.FindAgent(SimId.AgentSources),
-                Doctor = mymessage.Doctor
-			};
+			MyMessage freeDoctor = (MyMessage)message.CreateCopy();
+            freeDoctor.Code = Mc.FreeDoctor;
+            freeDoctor.Addressee = MySim.FindAgent(SimId.AgentSources);
+            freeDoctor.Doctor = mymessage.Doctor;	
 			Notice(freeDoctor);
 
-            MyMessage freeAmb = new MyMessage(MySim)
-            {
-                Code = Mc.FreeAmbulance,
-                Addressee = MySim.FindAgent(SimId.AgentSources),
-                AmbulanceB = mymessage.AmbulanceB,
-				AmbulanceA = mymessage.AmbulanceA
-            };
+            MyMessage freeAmb = (MyMessage)message.CreateCopy();
+            freeAmb.Code = Mc.FreeAmbulance;
+            freeAmb.Addressee = MySim.FindAgent(SimId.AgentSources);
+            freeAmb.AmbulanceB = mymessage.AmbulanceB;
+			freeAmb.AmbulanceA = mymessage.AmbulanceA;
             Notice(freeAmb);
 
+            mymessage.Nurse = null;
+            mymessage.Doctor = null;
+            mymessage.AmbulanceA = null;
+            mymessage.AmbulanceB = null;
+
+            patient.Status = PatientStatus.Leaving;
+            MyMessage transferMessage = (MyMessage)message.CreateCopy();
+            transferMessage.Code = Mc.Transfer;
+            transferMessage.Addressee = MySim.FindAgent(SimId.AgentTransfers);
+            transferMessage.Patient = patient;
+            Request(transferMessage);
         }
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -224,7 +271,7 @@ namespace Agents.AgentOfUrgent
 
 		override public void ProcessMessage(MessageForm message)
 		{
-			switch (message.Code)
+            switch (message.Code)
 			{
 			case Mc.RequestResource:
 				ProcessRequestResource(message);

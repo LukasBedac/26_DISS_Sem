@@ -6,7 +6,7 @@ using Core.EventSimulation.TestSimulation;
 using Core.MonteCarlo.Simulations;
 using TestConsole.Distributiontest;
 
-//DataGenerationTest dataGen = new DataGenerationTest();
+DataGenerationTest dataGen = new DataGenerationTest();
 //IntervalTest intervalTest = new IntervalTest();
 
 //dataGen.GenerateDiscreteUniform();
@@ -15,7 +15,7 @@ using TestConsole.Distributiontest;
 //dataGen.GenerateEmpiricContinuous();
 //dataGen.GenerateTriangular();
 //dataGen.GenerateExponential();
-
+dataGen.GenerateErlang();
 //intervalTest.CheckIntervals();
 
 //Sim1 sim1 = new Sim1(100000);
@@ -25,6 +25,6 @@ using TestConsole.Distributiontest;
 //Sim5 sim5 = new Sim5(100000);
 //Sim6 sim6 = new Sim6(100000);
 
-TestSimCore testSim = new TestSimCore(1);
-testSim.Run();
+//TestSimCore testSim = new TestSimCore(1);
+//testSim.Run();
 

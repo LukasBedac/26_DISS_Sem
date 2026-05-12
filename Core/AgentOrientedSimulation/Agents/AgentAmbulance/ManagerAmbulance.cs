@@ -30,33 +30,43 @@ namespace Agents.AgentAmbulance
 			MyMessage msg = (MyMessage)message;
 			if (msg.AmbulanceA != null)
 			{
-				MyAgent.FreeA.Add(msg.AmbulanceA);
+				MyAgent.RecordStatA();
+				MyAgent.AmbulancesA.Add(msg.AmbulanceA);
 				if (MyAgent.QueueA.Count > 0)
 				{
-					MyMessage nextMsg = MyAgent.QueueA.Dequeue();
-					nextMsg.AmbulanceA = MyAgent.FreeA[0]; MyAgent.FreeA.RemoveAt(0);
+                    MyAgent.RecordStatA();
+                    MyMessage nextMsg = MyAgent.QueueA.Dequeue();
+					nextMsg.AmbulanceA = MyAgent.AmbulancesA[0];
+					MyAgent.AmbulancesA.RemoveAt(0);
 					Response(nextMsg);
 				}
 				else if (MyAgent.QueueAny.Count > 0)
 				{
-					MyMessage nextMsg = MyAgent.QueueAny.Dequeue();
-					nextMsg.AmbulanceA = MyAgent.FreeA[0]; MyAgent.FreeA.RemoveAt(0);
+                    MyAgent.RecordStatA();
+                    MyMessage nextMsg = MyAgent.QueueAny.Dequeue();
+					nextMsg.AmbulanceA = MyAgent.AmbulancesA[0];
+					MyAgent.AmbulancesA.RemoveAt(0);
 					Response(nextMsg);
 				}
 			}
 			if (msg.AmbulanceB != null)
 			{
-				MyAgent.FreeB.Add(msg.AmbulanceB);
+				MyAgent.RecordStatB();
+                MyAgent.AmbulancesB.Add(msg.AmbulanceB);
 				if (MyAgent.QueueB.Count > 0)
 				{
-					MyMessage nextMsg = MyAgent.QueueB.Dequeue();
-					nextMsg.AmbulanceB = MyAgent.FreeB[0]; MyAgent.FreeB.RemoveAt(0);
+					MyAgent.RecordStatB();
+                    MyMessage nextMsg = MyAgent.QueueB.Dequeue();
+					nextMsg.AmbulanceB = MyAgent.AmbulancesB[0];
+					MyAgent.AmbulancesB.RemoveAt(0);
 					Response(nextMsg);
 				}
 				else if (MyAgent.QueueAny.Count > 0)
 				{
-					MyMessage nextMsg = MyAgent.QueueAny.Dequeue();
-					nextMsg.AmbulanceB = MyAgent.FreeB[0]; MyAgent.FreeB.RemoveAt(0);
+					MyAgent.RecordStatB();
+                    MyMessage nextMsg = MyAgent.QueueAny.Dequeue();
+					nextMsg.AmbulanceB = MyAgent.AmbulancesB[0];
+					MyAgent.AmbulancesB.RemoveAt(0);
 					Response(nextMsg);
 				}
 			}
@@ -66,10 +76,11 @@ namespace Agents.AgentAmbulance
 		public void ProcessRequestAmbulanceAllocationB(MessageForm message)
 		{
             MyMessage msg = (MyMessage)message;
-            if (MyAgent.FreeB.Count > 0)
+            if (MyAgent.AmbulancesB.Count > 0)
             {
-                msg.AmbulanceB = MyAgent.FreeB[0];
-                MyAgent.FreeB.RemoveAt(0);
+				MyAgent.RecordStatB();
+                msg.AmbulanceB = MyAgent.AmbulancesB[0];
+                MyAgent.AmbulancesB.RemoveAt(0);
                 Response(msg);
             }
             else MyAgent.QueueB.Enqueue(msg, (msg.Patient.Priority, msg.Patient.ArrivalTime));
@@ -83,37 +94,42 @@ namespace Agents.AgentAmbulance
 
             if (prio == 1 || prio == 2)
             {
-                if (MyAgent.FreeA.Count > 0) 
+                if (MyAgent.AmbulancesA.Count > 0) 
 				{ 
-					msg.AmbulanceA = MyAgent.FreeA[0];
-					MyAgent.FreeA.RemoveAt(0);
+					MyAgent.RecordStatA();
+					msg.AmbulanceA = MyAgent.AmbulancesA[0];
+					MyAgent.AmbulancesA.RemoveAt(0);
 					Response(msg);
 				}
                 else MyAgent.QueueA.Enqueue(msg, (prio, msg.Patient.ArrivalTime));
             }
             else if (prio == 5)
             {
-                if (MyAgent.FreeB.Count > 0) 
+                if (MyAgent.AmbulancesB.Count > 0) 
 				{ 
-					msg.AmbulanceB = MyAgent.FreeB[0];
-					MyAgent.FreeB.RemoveAt(0);
+					MyAgent.RecordStatB();
+                    msg.AmbulanceB = MyAgent.AmbulancesB[0];
+					MyAgent.AmbulancesB.RemoveAt(0);
 					Response(msg);
 				}
                 else MyAgent.QueueB.Enqueue(msg, (prio, msg.Patient.ArrivalTime));
             }
             else
             {
-                if (MyAgent.FreeA.Count > 0) 
-				{
-					msg.AmbulanceA = MyAgent.FreeA[0];
-					MyAgent.FreeA.RemoveAt(0); 
-					Response(msg); 
-				}
-                else if (MyAgent.FreeB.Count > 0) 
-				{ 
-					msg.AmbulanceB = MyAgent.FreeB[0]; 
-					MyAgent.FreeB.RemoveAt(0); Response(msg); 
-				}
+                if (MyAgent.AmbulancesB.Count > 0)
+                {
+                    MyAgent.RecordStatB();
+                    msg.AmbulanceB = MyAgent.AmbulancesB[0];
+                    MyAgent.AmbulancesB.RemoveAt(0);
+                    Response(msg);
+                }
+                else if (MyAgent.AmbulancesA.Count > 0)
+                {
+                    MyAgent.RecordStatA();
+                    msg.AmbulanceA = MyAgent.AmbulancesA[0];
+                    MyAgent.AmbulancesA.RemoveAt(0);
+                    Response(msg);
+                }
                 else MyAgent.QueueAny.Enqueue(msg, (prio, msg.Patient.ArrivalTime));
             }
         }

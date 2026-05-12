@@ -40,12 +40,13 @@ namespace Agents.AgentExaminations.ContinualAssistants
 			double examTime = 0;
             if (myMessage.Patient.Priority == 0)
 			{
-				examTime = _examinationAmbulanceTimeGenerator.NextDouble();
+				examTime = _examinationAmbulanceTimeGenerator.NextDouble() * 60;
             } else
 			{
-				examTime = _examinationWalkTimeGenerator.NextDouble();
+				examTime = _examinationWalkTimeGenerator.NextDouble() * 60;
             }
-			Hold(examTime, myMessage);
+			myMessage.Code = Mc.Finish;
+            Hold(examTime, myMessage);
         }
 
 		//meta! userInfo="Process messages defined in code", id="0"
@@ -53,7 +54,10 @@ namespace Agents.AgentExaminations.ContinualAssistants
 		{
 			switch (message.Code)
 			{
-			}
+				case Mc.Finish:
+					AssistantFinished(message);
+					break;
+            }
 		}
 
 		//meta! userInfo="Generated code: do not modify", tag="begin"

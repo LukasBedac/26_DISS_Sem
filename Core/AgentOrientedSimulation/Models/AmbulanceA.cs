@@ -36,12 +36,16 @@ namespace Core.AgentOrientedSimulation.Models
             AnimItem = new AnimShapeItem(AnimShape.SQUARE, Colors.LightSkyBlue, _size);
             AnimItem.SetPosition(400 + ((ID - 1) * (_size + _gap)), 100);
             AnimItem.Visible = true;
+            AnimItem.ZIndex = 1;
 
             _label = new AnimTextItem($"A{ID}");
             _label.SetPosition(400 + ((ID - 1) * (_size + _gap)) + (_size / 4), 100 - (_size / 4));
 
-            _sim.Animator.Register(AnimItem);
-            _sim.Animator.Register(_label);
+            if (_sim.AnimatorExists)
+            {
+                _sim.Animator.Register(AnimItem);
+                _sim.Animator.Register(_label);
+            }
 
             CenterPosition = new PointF(400 + ((ID - 1) * (_size + _gap)) + (_size / 2), 100 + (_size / 2));
         }
